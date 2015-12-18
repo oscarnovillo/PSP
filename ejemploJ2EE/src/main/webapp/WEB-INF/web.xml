@@ -5,7 +5,7 @@
         <servlet-class>com.ejemploj2ee.ServletWebInf</servlet-class>
         <init-param>
             <param-name>test</param-name>
-            <param-value>test</param-value>
+            <param-value>10-20-30</param-value>
         </init-param>
     </servlet>
     <servlet-mapping>
