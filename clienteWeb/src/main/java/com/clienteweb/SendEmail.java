@@ -20,9 +20,10 @@ public class SendEmail {
     public static void main(String[] args) {
         try {
             Email email = new SimpleEmail();
-            email.setHostName("smtp01.educa.madrid.org");
+            //email.setHostName("smtp01.educa.madrid.org");
+            email.setHostName("localhost");
             email.setSmtpPort(25);
-            email.setAuthenticator(new DefaultAuthenticator("pp", "prueba2015"));
+            //email.setAuthenticator(new DefaultAuthenticator("pp", "prueba2015"));
             email.setSSLOnConnect(false);
             email.setFrom("luis.vidales@educa.madrid.org");
             email.setSubject("TestMail");
