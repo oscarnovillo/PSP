@@ -25,7 +25,7 @@ public class SendEmail {
             email.setSmtpPort(25);
             //email.setAuthenticator(new DefaultAuthenticator("pp", "prueba2015"));
             email.setSSLOnConnect(false);
-            email.setFrom("luis.vidales@educa.madrid.org");
+            email.setFrom("pepo@educa.madrid.org");
             email.setSubject("TestMail");
             email.setMsg("This is a test mail ... :-)");
             email.addTo("oscar.novillo@gmail.com");
