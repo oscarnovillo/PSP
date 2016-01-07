@@ -24,23 +24,33 @@ public class JsoupClient {
 
     public static void main(String[] args) {
         Document homePage = null;
-        Response res = null;
+        Response response = null;
 
         try {
+            response = Jsoup.connect("http://localhost:8080/ServletSession")
+                    .execute();
+            response.body();
+            
+            
             homePage = Jsoup.connect("http://localhost:8080/ServletSession")
                     //.data("optionsProfesores", "null")
-                    //             .cookies(response.cookies())
+                    .cookies(response.cookies())
                     .post();
             
-            res = Jsoup.connect("http://localhost:8080/ServletSession")
+            response = Jsoup.connect("http://localhost:8080/ServletSession")
+                    .cookies(response.cookies())
                     .execute();
-            res.body();
+            response.body();
 
         } catch (IOException ex) {
             Logger.getLogger(JsoupClient.class.getName()).log(Level.SEVERE, null, ex);
         }
         System.out.println(homePage.body().text());
-        System.out.println(res.body());
+        try {
+            System.out.println(response.parse().body().text());
+        } catch (IOException ex) {
+            Logger.getLogger(JsoupClient.class.getName()).log(Level.SEVERE, null, ex);
+        }
 
     }
 
