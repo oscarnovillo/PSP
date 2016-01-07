@@ -8,34 +8,34 @@ package com.clienteweb;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.ObjectMapper;
-
-import java.io.*;
-import java.util.ArrayList;
+import java.io.IOException;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import org.apache.http.Header;
 import org.apache.http.HttpEntity;
-import org.apache.http.HttpResponse;
-import org.apache.http.StatusLine;
-import org.apache.http.client.ClientProtocolException;
-import org.apache.http.client.HttpClient;
-import org.apache.http.client.HttpResponseException;
-import org.apache.http.client.ResponseHandler;
 import org.apache.http.client.methods.CloseableHttpResponse;
 import org.apache.http.client.methods.HttpGet;
+import org.apache.http.client.protocol.HttpClientContext;
+import org.apache.http.cookie.Cookie;
 import org.apache.http.impl.client.CloseableHttpClient;
 import org.apache.http.impl.client.HttpClients;
 import org.apache.http.util.EntityUtils;
+import sun.net.www.http.HttpClient;
 
-public class ClientWeb {
-
-    private static String url = "http://www.apache.org/";
+/**
+ *
+ * @author oscar
+ */
+public class ClienteWebCookies {
 
     public static void main(String[] args) {
         CloseableHttpClient httpclient = HttpClients.createDefault();
-        try {
-            HttpGet httpGet = new HttpGet("http://localhost:8080/ControllerPeliculas?op=ADD");
 
-            CloseableHttpResponse response1 = httpclient.execute(httpGet);
+        try {
+            HttpGet httpGet = new HttpGet("http://localhost:8080/ServletSession");
+            HttpClientContext context = HttpClientContext.create();
+            
+            CloseableHttpResponse response1 = httpclient.execute(httpGet, context);
             // The underlying HTTP connection is still held by the response object
             // to allow the response content to be streamed directly from the network socket.
             // In order to ensure correct deallocation of system resources
@@ -44,25 +44,59 @@ public class ClientWeb {
             // connection cannot be safely re-used and will be shut down and discarded
             // by the connection manager.
             try {
+                
+                
                 System.out.println(response1.getStatusLine());
                 HttpEntity entity1 = response1.getEntity();
                 // do something useful with the response body
                 // and ensure it is fully consumed
-                try {
-                    ObjectMapper mapper = new ObjectMapper();
 
-                    mapper.configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);
-                    Juego j = mapper.readValue(entity1.getContent(),
-                            new TypeReference<Juego>() {
-                    });
-                    System.out.println(j.getNombre());
-                } catch (IOException ex) {
-
+                Header[] hs = response1.getAllHeaders();
+                for (Header h : hs) {
+                    System.out.println(h.getName() + "**** " + h.getValue());
                 }
-
+                System.out.println(EntityUtils.toString(entity1,"UTF-8"));
+                for (Cookie c : context.getCookieStore().getCookies())
+                {
+                    System.out.println(c.getName()+ " "+c.getValue());
+                }
+                
+                // Get all the cookies
             } finally {
                 response1.close();
             }
+
+            response1 = httpclient.execute(httpGet, context);
+            // The underlying HTTP connection is still held by the response object
+            // to allow the response content to be streamed directly from the network socket.
+            // In order to ensure correct deallocation of system resources
+            // the user MUST call CloseableHttpResponse#close() from a finally clause.
+            // Please note that if response content is not fully consumed the underlying
+            // connection cannot be safely re-used and will be shut down and discarded
+            // by the connection manager.
+            try {
+                
+                
+                System.out.println(response1.getStatusLine());
+                HttpEntity entity1 = response1.getEntity();
+                // do something useful with the response body
+                // and ensure it is fully consumed
+
+                Header[] hs = response1.getAllHeaders();
+                for (Header h : hs) {
+                    System.out.println(h.getName() + "**** " + h.getValue());
+                }
+                System.out.println(EntityUtils.toString(entity1,"UTF-8"));
+                for (Cookie c : context.getCookieStore().getCookies())
+                {
+                    System.out.println(c.getName()+ " "+c.getValue());
+                }
+                
+                // Get all the cookies
+            } finally {
+                response1.close();
+            }
+
             /*
             HttpPost httpPost = new HttpPost("http://httpbin.org/post");
             List <NameValuePair> nvps = new ArrayList <NameValuePair>();
@@ -80,40 +114,6 @@ public class ClientWeb {
             } finally {
                 response2.close();
             }*/
-            ResponseHandler<Juego> rh = new ResponseHandler<Juego>() {
-
-                @Override
-                public Juego handleResponse(
-                        final HttpResponse response) throws IOException {
-                    Juego j = null;
-                    StatusLine statusLine = response.getStatusLine();
-                    HttpEntity entity = response.getEntity();
-                    if (statusLine.getStatusCode() >= 300) {
-                        throw new HttpResponseException(
-                                statusLine.getStatusCode(),
-                                statusLine.getReasonPhrase());
-                    }
-                    if (entity == null) {
-                        throw new ClientProtocolException("Response contains no content");
-                    }
-                    try {
-                        ObjectMapper mapper = new ObjectMapper();
-
-                        mapper.configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);
-                        j = mapper.readValue(entity.getContent(),
-                                new TypeReference<Juego>() {
-                        });
-                        
-                    } catch (IOException ex) {
-
-                    }
-                    return j;
-                }
-            };
-
-            Juego jjj = httpclient.execute(httpGet,rh);
-            System.out.println(jjj.getNombre());
-            
         } catch (IOException ex) {
             Logger.getLogger(ClientWeb.class.getName()).log(Level.SEVERE, null, ex);
         } finally {
