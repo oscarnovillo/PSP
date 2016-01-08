@@ -5,7 +5,8 @@
  */
 package com.ejemploj2ee;
 
-import com.ejemploj2ee.model.Juego;
+
+import com.datoshttp.Juego;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import java.io.File;
 import java.io.IOException;
