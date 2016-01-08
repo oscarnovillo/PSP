@@ -5,6 +5,7 @@
  */
 package com.clienteweb;
 
+import com.datoshttp.Juego;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -28,7 +29,7 @@ import org.apache.http.util.EntityUtils;
 
 public class ClientWeb {
 
-    private static String url = "http://www.apache.org/";
+    //private static String url = "http://www.apache.org/";
 
     public static void main(String[] args) {
         CloseableHttpClient httpclient = HttpClients.createDefault();

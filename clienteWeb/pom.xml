@@ -37,6 +37,10 @@
 	<artifactId>jsoup</artifactId>
 	<version>1.8.3</version>
 </dependency>
-        
+        <dependency>
+            <groupId>${project.groupId}</groupId>
+            <artifactId>datosHTTP</artifactId>
+            <version>${project.version}</version>
+        </dependency>
     </dependencies>
 </project>

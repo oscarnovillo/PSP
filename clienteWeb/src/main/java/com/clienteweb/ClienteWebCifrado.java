@@ -5,6 +5,7 @@
  */
 package com.clienteweb;
 
+import com.datoshttp.Juego;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.ObjectMapper;
