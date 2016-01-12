@@ -48,6 +48,7 @@ public class ServletSession extends HttpServlet {
         if (i==null)
         {
             sesion.setAttribute("numero", 1);
+            i=1;
         }
         else
         {
@@ -65,6 +66,7 @@ public class ServletSession extends HttpServlet {
             out.println("<body>");
             out.println("<h1>Servlet ServletSession at "+sesion.getAttribute("numero")+"&nbsp;"+
                     global+"</h1>");
+            out.println("<h1>"+config.Configuration.getInstance().getDburl()+"</h1>");
             out.println("</body>");
             out.println("</html>");
         }
