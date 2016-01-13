@@ -32,9 +32,12 @@ public class ClientWeb {
     //private static String url = "http://www.apache.org/";
 
     public static void main(String[] args) {
+       
+        
         CloseableHttpClient httpclient = HttpClients.createDefault();
         try {
             HttpGet httpGet = new HttpGet("http://localhost:8080/ControllerPeliculas?op=ADD");
+           
 
             CloseableHttpResponse response1 = httpclient.execute(httpGet);
             // The underlying HTTP connection is still held by the response object
