@@ -30,6 +30,7 @@ public class JsoupClient {
             response = Jsoup.connect("http://localhost:8080/ServletSession")
                     .execute();
             response.body();
+
             
             
             homePage = Jsoup.connect("http://localhost:8080/ServletSession")

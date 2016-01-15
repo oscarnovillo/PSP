@@ -61,6 +61,7 @@ public class ClienteWebCookies {
                     System.out.println(c.getName()+ " "+c.getValue());
                 }
                 
+
                 // Get all the cookies
             } finally {
                 response1.close();
