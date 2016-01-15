@@ -29,9 +29,6 @@ public class JsoupClient {
         try {
             response = Jsoup.connect("http://localhost:8080/ServletSession")
                     .execute();
-            response.body();
-
-            
             
             homePage = Jsoup.connect("http://localhost:8080/ServletSession")
                     //.data("optionsProfesores", "null")
