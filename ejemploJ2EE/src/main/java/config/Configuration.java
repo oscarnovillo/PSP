@@ -58,17 +58,7 @@ public class Configuration {
 
     
     private Configuration() {
-       Properties p = new Properties();
-        try {
-            p.load(new FileInputStream("config.properties"));
-        } catch (IOException ex) {
-            Logger.getLogger(Configuration.class.getName()).log(Level.SEVERE, null, ex);
-        }
-       // this.dburl = p.getProperty("dburl");
-        
-        
-        
-        
+      
     }
 
    

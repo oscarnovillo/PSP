@@ -50,13 +50,9 @@ public class ControllerPeliculas extends HttpServlet {
                     break;
 
             }
-
-            try {
-                ObjectMapper mapper = new ObjectMapper();
-                mapper.writeValue(response.getOutputStream(), j);
-            } catch (IOException ex) {
-
-            }
+request.setAttribute("juego", j);
+            
+            
 
         }
 
