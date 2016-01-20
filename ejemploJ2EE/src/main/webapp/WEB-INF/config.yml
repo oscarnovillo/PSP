@@ -1,2 +1,2 @@
 ## YAML Template.
-dburl: uuu
+dburl: jdbc:sqlite:juegos.db

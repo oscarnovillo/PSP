@@ -40,13 +40,7 @@ public class Configuration {
     {
         if (config == null)
         {
-            try {
-                config =  new Configuration();
-                Yaml yaml = new Yaml();
-                config = (Configuration)yaml.loadAs(new FileInputStream("config.yml"),Configuration.class);
-            } catch (FileNotFoundException ex) {
-                Logger.getLogger(Configuration.class.getName()).log(Level.SEVERE, null, ex);
-            }
+           
         }
         return config;
     }
