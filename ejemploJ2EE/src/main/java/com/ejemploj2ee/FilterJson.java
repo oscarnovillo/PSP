@@ -90,23 +90,23 @@ public class FilterJson implements Filter {
 	PrintWriter respOut = new PrintWriter(response.getWriter());
 	respOut.println("<P><B>This has been appended by an intrusive filter.</B>");
          */
-//        try {
-//                ObjectMapper mapper = new ObjectMapper();
-//                mapper.writeValue(response.getOutputStream(), request.getAttribute("juego"));
-//            } catch (IOException ex) {
-//
-//            }
         try {
-            ObjectMapper mapper = new ObjectMapper();
-            String obj = mapper.writeValueAsString(request.getAttribute("juego"));
-            byte[] bytes = Utils.PasswordHash.cifra(obj);
-            String mandar = new String(Base64.encodeBase64(bytes));
-            response.getWriter().print(mandar);
-        } catch (IOException ex) {
+                ObjectMapper mapper = new ObjectMapper();
+                mapper.writeValue(response.getOutputStream(), request.getAttribute("juego"));
+            } catch (IOException ex) {
 
-        } catch (Exception ex) {
-            Logger.getLogger(FilterJson.class.getName()).log(Level.SEVERE, null, ex);
-        }
+            }
+//        try {
+//            ObjectMapper mapper = new ObjectMapper();
+//            String obj = mapper.writeValueAsString(request.getAttribute("juego"));
+//            byte[] bytes = Utils.PasswordHash.cifra(obj);
+//            String mandar = new String(Base64.encodeBase64(bytes));
+//            response.getWriter().print(mandar);
+//        } catch (IOException ex) {
+//
+//        } catch (Exception ex) {
+//            Logger.getLogger(FilterJson.class.getName()).log(Level.SEVERE, null, ex);
+//        }
        
 
     }
