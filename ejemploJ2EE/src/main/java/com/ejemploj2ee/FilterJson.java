@@ -107,17 +107,7 @@ public class FilterJson implements Filter {
         } catch (Exception ex) {
             Logger.getLogger(FilterJson.class.getName()).log(Level.SEVERE, null, ex);
         }
-        Enumeration<String> nombres = request.getAttributeNames();
-        while (nombres.hasMoreElements()) {
-            String nombre = nombres.nextElement();
-            try {
-                ObjectMapper mapper = new ObjectMapper();
-                response.getWriter().print("     "+request.getAttribute(nombre));
-                //mapper.writeValue(response.getOutputStream(), request.getAttribute(nombre));
-            } catch (IOException ex) {
-
-            }
-        }
+       
 
     }
 
