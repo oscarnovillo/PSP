@@ -5,7 +5,6 @@
  */
 package com.ejemploj2ee;
 
-
 import com.datoshttp.Juego;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import java.io.File;
@@ -39,26 +38,12 @@ public class ControllerPeliculas extends HttpServlet {
             throws ServletException, IOException {
 
         String op = request.getParameter("op");
-        if (op != null) {
-            Juego j = new Juego("gow", 1);
-            switch (op) {
-                case "ADD":
-                    break;
-                case "LISTA":
-                    break;
-                case "DEL":
-                    break;
-
-            }
-request.setAttribute("juego", j);
-            
-            
-
-        }
+        Juego j = new Juego("gow", 1);
+        request.setAttribute("juego", j);
 
     }
 
-    // <editor-fold defaultstate="collapsed" desc="HttpServlet methods. Click on the + sign on the left to edit the code.">
+// <editor-fold defaultstate="collapsed" desc="HttpServlet methods. Click on the + sign on the left to edit the code.">
     /**
      * Handles the HTTP <code>GET</code> method.
      *

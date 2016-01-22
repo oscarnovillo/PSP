@@ -17,15 +17,15 @@ import org.yaml.snakeyaml.Yaml;
 public class Configuration {
     
     private static Configuration config;
-    private static String pathBase;
+   private String pathBase;
     
     public static Configuration getInstance(InputStream in,String pathBase)
     {
         if (config == null)
         {
-            config =  new Configuration(pathBase);
             Yaml yaml = new Yaml();
             config = (Configuration)yaml.loadAs(in,Configuration.class);
+            config.pathBase = pathBase;
         }
         return config;
     }
@@ -37,29 +37,19 @@ public class Configuration {
     }
     
     private String dburl;
-    private ArrayList<String> lista;
-
-    public ArrayList<String> getLista() {
-        return lista;
-    }
-
-    public void setLista(ArrayList<String> lista) {
-        this.lista = lista;
-    }
-
+  
+  private Configuration()
+  {
+      
+  }
     
-    private Configuration(String pathBase) {
-      this.pathBase = pathBase;
-    }
-
-   
 
     public String getDburl() {
-        return dburl;
+        return "jdbc:sqlite:"+pathBase+"\\"+dburl;
     }
 
     public void setDburl(String dburl) {
-        this.dburl = "jdbc:sqlite:"+pathBase+"/"+dburl;
+        this.dburl = dburl;
     }
 
    

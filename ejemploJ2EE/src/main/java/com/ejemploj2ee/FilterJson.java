@@ -11,6 +11,8 @@ import java.io.PrintStream;
 import java.io.PrintWriter;
 import java.io.StringWriter;
 import java.util.Enumeration;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.servlet.Filter;
 import javax.servlet.FilterChain;
 import javax.servlet.FilterConfig;
@@ -18,24 +20,25 @@ import javax.servlet.ServletException;
 import javax.servlet.ServletRequest;
 import javax.servlet.ServletResponse;
 import javax.servlet.annotation.WebFilter;
+import org.apache.commons.codec.binary.Base64;
 
 /**
  *
  * @author oscar
  */
-@WebFilter(filterName = "FilterJson", urlPatterns = {"/ControllerPeliculas"})
+@WebFilter(filterName = "FilterJson", urlPatterns = {"/ControllerPeliculas", "/cargaSQLITE"})
 public class FilterJson implements Filter {
-    
+
     private static final boolean debug = true;
 
     // The filter configuration object we are associated with.  If
     // this value is null, this filter instance is not currently
     // configured. 
     private FilterConfig filterConfig = null;
-    
+
     public FilterJson() {
-    }    
-    
+    }
+
     private void doBeforeProcessing(ServletRequest request, ServletResponse response)
             throws IOException, ServletException {
         if (debug) {
@@ -62,8 +65,8 @@ public class FilterJson implements Filter {
 	    log(buf.toString());
 	}
          */
-    }    
-    
+    }
+
     private void doAfterProcessing(ServletRequest request, ServletResponse response)
             throws IOException, ServletException {
         if (debug) {
@@ -93,19 +96,29 @@ public class FilterJson implements Filter {
 //            } catch (IOException ex) {
 //
 //            }
+        try {
+            ObjectMapper mapper = new ObjectMapper();
+            String obj = mapper.writeValueAsString(request.getAttribute("juego"));
+            byte[] bytes = Utils.PasswordHash.cifra(obj);
+            String mandar = new String(Base64.encodeBase64(bytes));
+            response.getWriter().print(mandar);
+        } catch (IOException ex) {
+
+        } catch (Exception ex) {
+            Logger.getLogger(FilterJson.class.getName()).log(Level.SEVERE, null, ex);
+        }
         Enumeration<String> nombres = request.getAttributeNames();
-        while(nombres.hasMoreElements())
-        {
+        while (nombres.hasMoreElements()) {
             String nombre = nombres.nextElement();
             try {
                 ObjectMapper mapper = new ObjectMapper();
-                mapper.writeValue(response.getOutputStream(), request.getAttribute(nombre));
+                response.getWriter().print("     "+request.getAttribute(nombre));
+                //mapper.writeValue(response.getOutputStream(), request.getAttribute(nombre));
             } catch (IOException ex) {
 
             }
         }
-        
-        
+
     }
 
     /**
@@ -120,13 +133,13 @@ public class FilterJson implements Filter {
     public void doFilter(ServletRequest request, ServletResponse response,
             FilterChain chain)
             throws IOException, ServletException {
-        
+
         if (debug) {
             log("FilterJson:doFilter()");
         }
-        
+
         doBeforeProcessing(request, response);
-        
+
         Throwable problem = null;
         try {
             chain.doFilter(request, response);
@@ -137,7 +150,7 @@ public class FilterJson implements Filter {
             problem = t;
             t.printStackTrace();
         }
-        
+
         doAfterProcessing(request, response);
 
         // If there was a problem, we want to rethrow it if it is
@@ -172,16 +185,16 @@ public class FilterJson implements Filter {
     /**
      * Destroy method for this filter
      */
-    public void destroy() {        
+    public void destroy() {
     }
 
     /**
      * Init method for this filter
      */
-    public void init(FilterConfig filterConfig) {        
+    public void init(FilterConfig filterConfig) {
         this.filterConfig = filterConfig;
         if (filterConfig != null) {
-            if (debug) {                
+            if (debug) {
                 log("FilterJson:Initializing filter");
             }
         }
@@ -200,20 +213,20 @@ public class FilterJson implements Filter {
         sb.append(")");
         return (sb.toString());
     }
-    
+
     private void sendProcessingError(Throwable t, ServletResponse response) {
-        String stackTrace = getStackTrace(t);        
-        
+        String stackTrace = getStackTrace(t);
+
         if (stackTrace != null && !stackTrace.equals("")) {
             try {
                 response.setContentType("text/html");
                 PrintStream ps = new PrintStream(response.getOutputStream());
-                PrintWriter pw = new PrintWriter(ps);                
+                PrintWriter pw = new PrintWriter(ps);
                 pw.print("<html>\n<head>\n<title>Error</title>\n</head>\n<body>\n"); //NOI18N
 
                 // PENDING! Localize this for next official release
-                pw.print("<h1>The resource did not process correctly</h1>\n<pre>\n");                
-                pw.print(stackTrace);                
+                pw.print("<h1>The resource did not process correctly</h1>\n<pre>\n");
+                pw.print(stackTrace);
                 pw.print("</pre></body>\n</html>"); //NOI18N
                 pw.close();
                 ps.close();
@@ -230,7 +243,7 @@ public class FilterJson implements Filter {
             }
         }
     }
-    
+
     public static String getStackTrace(Throwable t) {
         String stackTrace = null;
         try {
@@ -244,9 +257,9 @@ public class FilterJson implements Filter {
         }
         return stackTrace;
     }
-    
+
     public void log(String msg) {
-        filterConfig.getServletContext().log(msg);        
+        filterConfig.getServletContext().log(msg);
     }
-    
+
 }
