@@ -6,14 +6,8 @@
 package config;
 
 
-import java.io.FileInputStream;
-import java.io.FileNotFoundException;
-import java.io.IOException;
 import java.io.InputStream;
 import java.util.ArrayList;
-import java.util.Properties;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import org.yaml.snakeyaml.Yaml;
 
 /**
@@ -23,12 +17,13 @@ import org.yaml.snakeyaml.Yaml;
 public class Configuration {
     
     private static Configuration config;
+    private static String pathBase;
     
-    public static Configuration getInstance(InputStream in)
+    public static Configuration getInstance(InputStream in,String pathBase)
     {
         if (config == null)
         {
-            config =  new Configuration();
+            config =  new Configuration(pathBase);
             Yaml yaml = new Yaml();
             config = (Configuration)yaml.loadAs(in,Configuration.class);
         }
@@ -38,10 +33,6 @@ public class Configuration {
     
     public static Configuration getInstance()
     {
-        if (config == null)
-        {
-           
-        }
         return config;
     }
     
@@ -57,8 +48,8 @@ public class Configuration {
     }
 
     
-    private Configuration() {
-      
+    private Configuration(String pathBase) {
+      this.pathBase = pathBase;
     }
 
    
@@ -68,7 +59,7 @@ public class Configuration {
     }
 
     public void setDburl(String dburl) {
-        this.dburl = dburl;
+        this.dburl = "jdbc:sqlite:"+pathBase+"/"+dburl;
     }
 
    

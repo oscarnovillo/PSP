@@ -5,7 +5,6 @@
  */
 package com.ejemploj2ee;
 
-import javax.security.auth.login.Configuration;
 import javax.servlet.ServletContextEvent;
 import javax.servlet.ServletContextListener;
 
@@ -18,7 +17,8 @@ public class NewServletListener implements ServletContextListener {
 
     @Override
     public void contextInitialized(ServletContextEvent sce) {
-        config.Configuration.getInstance(sce.getServletContext().getResourceAsStream("/WEB-INF/config.yml"));
+        config.Configuration.getInstance(sce.getServletContext().getResourceAsStream("/WEB-INF/config.yml"),
+                sce.getServletContext().getRealPath("/WEB-INF/"));
     }
 
     @Override
