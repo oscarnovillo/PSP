@@ -37,6 +37,7 @@ import java.security.Security;
 import java.security.spec.InvalidKeySpecException;
 import javax.crypto.spec.SecretKeySpec;
 import javax.crypto.Cipher;
+import javax.crypto.SecretKey;
 
 import static org.apache.commons.codec.binary.Base64.decodeBase64;
 import static org.apache.commons.codec.binary.Base64.encodeBase64;
