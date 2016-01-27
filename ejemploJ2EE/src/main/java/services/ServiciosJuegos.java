@@ -3,7 +3,7 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package controller;
+package services;
 
 import dao.JuegosDAO;
 import java.util.ArrayList;
@@ -14,7 +14,7 @@ import model.Juego;
  *
  * @author oscar
  */
-public class ControlJuegos {
+public class ServiciosJuegos {
     
     public ArrayList<Juego> getAllJuegos()
     {

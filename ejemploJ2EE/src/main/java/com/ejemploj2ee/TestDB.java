@@ -5,7 +5,7 @@
  */
 package com.ejemploj2ee;
 
-import controller.ControlJuegos;
+import services.ServiciosJuegos;
 import java.io.IOException;
 import java.io.PrintWriter;
 import javax.servlet.ServletException;
@@ -42,7 +42,8 @@ public class TestDB extends HttpServlet {
             out.println("<title>Servlet testDB</title>");            
             out.println("</head>");
             out.println("<body>");
-            ControlJuegos juegos = new ControlJuegos();
+            
+            ServiciosJuegos juegos = new ServiciosJuegos();
             for(Juego j :juegos.getAllJuegos())
             {
                 out.println("<h1> " + j.getNombre()+ "</h1>");

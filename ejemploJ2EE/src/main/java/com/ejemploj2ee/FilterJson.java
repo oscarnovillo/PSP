@@ -10,9 +10,6 @@ import java.io.IOException;
 import java.io.PrintStream;
 import java.io.PrintWriter;
 import java.io.StringWriter;
-import java.util.Enumeration;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import javax.servlet.Filter;
 import javax.servlet.FilterChain;
 import javax.servlet.FilterConfig;
@@ -20,13 +17,12 @@ import javax.servlet.ServletException;
 import javax.servlet.ServletRequest;
 import javax.servlet.ServletResponse;
 import javax.servlet.annotation.WebFilter;
-import org.apache.commons.codec.binary.Base64;
 
 /**
  *
  * @author oscar
  */
-@WebFilter(filterName = "FilterJson", urlPatterns = {"/ControllerPeliculas", "/cargaSQLITE"})
+@WebFilter(filterName = "FilterJson", urlPatterns = {"/controlJuegos", "/cargaSQLITE"})
 public class FilterJson implements Filter {
 
     private static final boolean debug = true;

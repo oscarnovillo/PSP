@@ -6,7 +6,7 @@
 package com.ejemploj2ee;
 
 import config.Configuration;
-import controller.ControlJuegos;
+import services.ServiciosJuegos;
 import java.io.IOException;
 import java.io.PrintWriter;
 import javax.servlet.ServletException;
@@ -35,7 +35,7 @@ public class CargaSQLITE extends HttpServlet {
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
 
-        ControlJuegos juegos = new ControlJuegos();
+        ServiciosJuegos juegos = new ServiciosJuegos();
         request.setAttribute("juego", juegos.getAllJuegos());
     }
 
