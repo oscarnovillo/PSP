@@ -16,20 +16,18 @@ import org.bouncycastle.jce.provider.BouncyCastleProvider;
 
 public class AlmacenarClaves {
 	public static void main(String[] args) throws Exception {
-		if (args.length != 1) {
-			mensajeAyuda();
-			System.exit(1);
-		}
 
-		System.out.println("Crea los ficheros "+args[0]+".secreta, "
-				+args[0]+".publica, "+args[0]+".privada");
+                String nombre = "test1";
+                
+		System.out.println("Crea los ficheros "+nombre+".secreta, "
+				+nombre+".publica, "+nombre+".privada");
 		
 		// Anadir provider  (el provider por defecto no soporta RSA)
 		Security.addProvider(new BouncyCastleProvider()); // Cargar el provider BC
 
 		/*** Crear claves RSA 512 bits  */
 		KeyPairGenerator generadorRSA = KeyPairGenerator.getInstance("RSA", "BC"); // Hace uso del provider BC
-		generadorRSA.initialize(512);
+		generadorRSA.initialize(1024);
 		KeyPair clavesRSA = generadorRSA.generateKeyPair();
 		PrivateKey clavePrivada = clavesRSA.getPrivate();
 		PublicKey clavePublica = clavesRSA.getPublic();
@@ -42,19 +40,20 @@ public class AlmacenarClaves {
 		PKCS8EncodedKeySpec pkcs8Spec = new PKCS8EncodedKeySpec(clavePrivada.getEncoded());
 
 		// 1.2 Escribirla a fichero binario
-		FileOutputStream out = new FileOutputStream(args[0] + ".privada");
+		FileOutputStream out = new FileOutputStream(nombre + ".privada");
 		out.write(pkcs8Spec.getEncoded());
 		out.close();
 
 		/*** 2 Recuperar clave Privada del fichero */
 		// 2.1 Leer datos binarios PKCS8
 		byte[] bufferPriv = new byte[5000];
-		FileInputStream in = new FileInputStream(args[0] + ".privada");
+		FileInputStream in = new FileInputStream(nombre + ".privada");
 		in.read(bufferPriv, 0, 5000);
 		in.close();
 
 		// 2.2 Recuperar clave privada desde datos codificados en formato PKCS8
 		PKCS8EncodedKeySpec clavePrivadaSpec = new PKCS8EncodedKeySpec(bufferPriv);
+                
 		PrivateKey clavePrivada2 = keyFactoryRSA.generatePrivate(clavePrivadaSpec);
 
 		if (clavePrivada.equals(clavePrivada2)) {
@@ -66,14 +65,14 @@ public class AlmacenarClaves {
 		X509EncodedKeySpec x509Spec = new X509EncodedKeySpec(clavePublica.getEncoded());
 
 		// 3.2 Escribirla a fichero binario
-		out = new FileOutputStream(args[0] + ".publica");
+		out = new FileOutputStream(nombre + ".publica");
 		out.write(x509Spec.getEncoded());
 		out.close();
 
 		/*** 4 Recuperar clave PUBLICA del fichero */
 		// 4.1 Leer datos binarios x809
 		byte[] bufferPub = new byte[5000];
-		in = new FileInputStream(args[0] + ".publica");
+		in = new FileInputStream(nombre + ".publica");
 		in.read(bufferPub, 0, 5000);
 		in.close();
 
@@ -95,18 +94,19 @@ public class AlmacenarClaves {
 
 		/*** 5 Volcar clave secreta  a fichero */
 		// 5.1 Escribirla directamente a fichero binario (válido para DES y 3DES)
-		out = new FileOutputStream(args[0] + ".secreta");
+		out = new FileOutputStream(nombre + ".secreta");
 		out.write(claveSecreta.getEncoded());
 		out.close();
 
 		/*** 6 Recuperar clave secreta del fichero */
 		// 6.1 Leer datos binarios directamente (válido para DES y 3DES)
 		byte[] bufferSecr = new byte[500];
-		in = new FileInputStream(args[0] + ".secreta");
+		in = new FileInputStream(nombre + ".secreta");
 		in.read(bufferSecr, 0, 500);
 		in.close();
 
 		// 6.2 Cargar clave directamente desd elos datos leidos
+                
 		DESKeySpec DESspec = new DESKeySpec(bufferSecr);
 		SecretKey claveSecreta2 = secretKeyFactoryDES.generateSecret(DESspec);
 
