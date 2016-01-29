@@ -51,7 +51,8 @@ public class JuegosDAO {
         }
         finally
         {
-            con.cerrarConexion(connection);
+            if (connection!=null)
+                con.cerrarConexion(connection);
         }
         return juegos;
     }
