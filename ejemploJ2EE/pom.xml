@@ -63,7 +63,12 @@
             <artifactId>snakeyaml</artifactId>
             <version>1.16</version>
         </dependency>
-
+        <dependency>
+            <groupId>org.bouncycastle</groupId>
+            <artifactId>bcprov-jdk14</artifactId>
+            <version>1.54</version>
+            <type>jar</type>
+        </dependency>
     </dependencies>
 
     <build>
@@ -123,15 +128,15 @@
                         <phase>install</phase>
                         <configuration>
                             <target>
-                           <!--     <ftp action="send" server="waws-prod-db3-039.ftp.azurewebsites.windows.net" 
-                                     remotedir="/site/wwwroot/webapps" 
-                                     userid="quevedo2dam\quevedoftp" 
-                                     password="" depends="yes" verbose="yes">
-                                    <fileset dir="${project.build.directory}">
-                                        <include name="*.war" />
-                                    </fileset>
-                                </ftp>
--->
+                                <!--     <ftp action="send" server="waws-prod-db3-039.ftp.azurewebsites.windows.net" 
+                                                                     remotedir="/site/wwwroot/webapps" 
+                                                                     userid="quevedo2dam\quevedoftp" 
+                                                                     password="" depends="yes" verbose="yes">
+                                                                    <fileset dir="${project.build.directory}">
+                                                                        <include name="*.war" />
+                                                                    </fileset>
+                                                                </ftp>
+                                -->
                                 <echo message="compile classpath: ${project.build.directory}"/>
                             </target>
                         </configuration>

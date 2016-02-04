@@ -18,7 +18,7 @@ import javax.servlet.http.HttpSession;
  *
  * @author oscar
  */
-@WebServlet(name = "ServletTestLogin", urlPatterns = {"/login"})
+@WebServlet(name = "ServletTestLogin", urlPatterns = {"/loginWebSocket"})
 public class ServletTestLogin extends HttpServlet {
 
     /**

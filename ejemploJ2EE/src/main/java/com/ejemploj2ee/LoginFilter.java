@@ -5,14 +5,10 @@
  */
 package com.ejemploj2ee;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
 import java.io.IOException;
 import java.io.PrintStream;
 import java.io.PrintWriter;
 import java.io.StringWriter;
-import java.util.logging.Level;
-import java.util.logging.Logger;
-import javax.crypto.SecretKey;
 import javax.servlet.Filter;
 import javax.servlet.FilterChain;
 import javax.servlet.FilterConfig;
@@ -21,15 +17,14 @@ import javax.servlet.ServletRequest;
 import javax.servlet.ServletResponse;
 import javax.servlet.annotation.WebFilter;
 import javax.servlet.http.HttpServletRequest;
-import org.apache.commons.codec.binary.Base64;
-import org.apache.http.HttpRequest;
+import javax.servlet.http.HttpSession;
 
 /**
  *
  * @author oscar
  */
-@WebFilter(filterName = "FilterJson", urlPatterns = {"/cargaSQLITE"})
-public class FilterJson implements Filter {
+@WebFilter(filterName = "LoginFilter")
+public class LoginFilter implements Filter {
 
     private static final boolean debug = true;
 
@@ -38,80 +33,24 @@ public class FilterJson implements Filter {
     // configured. 
     private FilterConfig filterConfig = null;
 
-    public FilterJson() {
+    public LoginFilter() {
     }
 
     private void doBeforeProcessing(ServletRequest request, ServletResponse response)
             throws IOException, ServletException {
         if (debug) {
-            log("FilterJson:DoBeforeProcessing");
+            log("LoginFilter:DoBeforeProcessing");
         }
+        //comprobar si hay login, sino, no hacer el siguiente filtro.
+        System.out.println("filtro login");
 
-        // Write code here to process the request and/or response before
-        // the rest of the filter chain is invoked.
-        // For example, a logging filter might log items on the request object,
-        // such as the parameters.
-        /*
-	for (Enumeration en = request.getParameterNames(); en.hasMoreElements(); ) {
-	    String name = (String)en.nextElement();
-	    String values[] = request.getParameterValues(name);
-	    int n = values.length;
-	    StringBuffer buf = new StringBuffer();
-	    buf.append(name);
-	    buf.append("=");
-	    for(int i=0; i < n; i++) {
-	        buf.append(values[i]);
-	        if (i < n-1)
-	            buf.append(",");
-	    }
-	    log(buf.toString());
-	}
-         */
     }
 
     private void doAfterProcessing(ServletRequest request, ServletResponse response)
             throws IOException, ServletException {
         if (debug) {
-            log("FilterJson:DoAfterProcessing");
+            log("LoginFilter:DoAfterProcessing");
         }
-
-        // Write code here to process the request and/or response after
-        // the rest of the filter chain is invoked.
-        // For example, a logging filter might log the attributes on the
-        // request object after the request has been processed. 
-        /*
-	for (Enumeration en = request.getAttributeNames(); en.hasMoreElements(); ) {
-	    String name = (String)en.nextElement();
-	    Object value = request.getAttribute(name);
-	    log("attribute: " + name + "=" + value.toString());
-
-	}
-         */
-        // For example, a filter might append something to the response.
-        /*
-	PrintWriter respOut = new PrintWriter(response.getWriter());
-	respOut.println("<P><B>This has been appended by an intrusive filter.</B>");
-         */
-       /* try {
-                ObjectMapper mapper = new ObjectMapper();
-                mapper.writeValue(response.getOutputStream(), request.getAttribute("juego"));
-            } catch (IOException ex) {
-
-            }
-        */
-        try {
-            ObjectMapper mapper = new ObjectMapper();
-            String obj = mapper.writeValueAsString(request.getAttribute("juego"));
-            SecretKey key = (SecretKey)((HttpServletRequest)request).getSession().getAttribute("clave");
-            byte[] bytes = Utils.PasswordHash.cifra(obj,key);
-            String mandar = new String(Base64.encodeBase64(bytes));
-            response.getWriter().print(mandar);
-        } catch (IOException ex) {
-
-        } catch (Exception ex) {
-            Logger.getLogger(FilterJson.class.getName()).log(Level.SEVERE, null, ex);
-        }
-       
 
     }
 
@@ -129,14 +68,20 @@ public class FilterJson implements Filter {
             throws IOException, ServletException {
 
         if (debug) {
-            log("FilterJson:doFilter()");
+            log("LoginFilter:doFilter()");
         }
 
         doBeforeProcessing(request, response);
 
         Throwable problem = null;
         try {
-            chain.doFilter(request, response);
+            HttpSession sesion = ((HttpServletRequest) request).getSession();
+            if (sesion.getAttribute("login") == null || sesion.getAttribute("login") != "OK") {
+                System.out.println("ERROR DE LOGIN");
+                ((HttpServletRequest) request).getRequestDispatcher("/error.jsp").forward(request, response);
+            } else {
+                chain.doFilter(request, response);
+            }
         } catch (Throwable t) {
             // If an exception is thrown somewhere down the filter chain,
             // we still want to execute our after processing, and then
@@ -189,7 +134,7 @@ public class FilterJson implements Filter {
         this.filterConfig = filterConfig;
         if (filterConfig != null) {
             if (debug) {
-                log("FilterJson:Initializing filter");
+                log("LoginFilter:Initializing filter");
             }
         }
     }
@@ -200,9 +145,9 @@ public class FilterJson implements Filter {
     @Override
     public String toString() {
         if (filterConfig == null) {
-            return ("FilterJson()");
+            return ("LoginFilter()");
         }
-        StringBuffer sb = new StringBuffer("FilterJson(");
+        StringBuffer sb = new StringBuffer("LoginFilter(");
         sb.append(filterConfig);
         sb.append(")");
         return (sb.toString());

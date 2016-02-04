@@ -27,8 +27,6 @@ package Utils;
  * ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE 
  * POSSIBILITY OF SUCH DAMAGE.
  */
-
-
 import java.security.SecureRandom;
 import javax.crypto.spec.PBEKeySpec;
 import javax.crypto.SecretKeyFactory;
@@ -39,7 +37,10 @@ import java.security.Security;
 import java.security.spec.InvalidKeySpecException;
 import javax.crypto.spec.SecretKeySpec;
 import javax.crypto.Cipher;
+import javax.crypto.SecretKey;
 
+import static org.apache.commons.codec.binary.Base64.decodeBase64;
+import static org.apache.commons.codec.binary.Base64.encodeBase64;
 import static org.apache.commons.codec.binary.Base64.decodeBase64;
 import static org.apache.commons.codec.binary.Base64.encodeBase64;
 
@@ -190,25 +191,39 @@ public class PasswordHash {
         }
     }
 
-    public static byte[] cifra(String sinCifrar) throws Exception {
+    public static byte[] cifra(String sinCifrar, SecretKey secret) throws Exception {
         final byte[] bytes = sinCifrar.getBytes("UTF-8");
-        final Cipher aes = obtieneCipher(true);
+        final Cipher aes = obtieneCipher(true, secret);
         final byte[] cifrado = aes.doFinal(bytes);
         return cifrado;
     }
 
-    public static String descifra(byte[] cifrado) throws Exception {
-        final Cipher aes = obtieneCipher(false);
+    public static String descifra(byte[] cifrado, SecretKey secret) throws Exception {
+        final Cipher aes = obtieneCipher(false, secret);
         final byte[] bytes = aes.doFinal(cifrado);
         final String sinCifrar = new String(bytes, "UTF-8");
         return sinCifrar;
     }
 
-    private static Cipher obtieneCipher(boolean paraCifrar) throws Exception {
-        final String frase = "FraseLargaConDiferentesLetrasNumerosYCaracteresEspeciales_áÁéÉíÍóÓúÚüÜñÑ1234567890!#%$&()=%_NO_USAR_ESTA_FRASE!_";
+    public static byte[] cifra(String sinCifrar) throws Exception {
+        return cifra(sinCifrar,obtieneClave());
+    }
+
+    public static String descifra(byte[] cifrado) throws Exception {
+        return descifra(cifrado,obtieneClave());
+    }
+
+    private static SecretKey obtieneClave() throws Exception
+    {
+         final String frase = "FraseLargaConDiferentesLetrasNumerosYCaracteresEspeciales_áÁéÉíÍóÓúÚüÜñÑ1234567890!#%$&()=%_NO_USAR_ESTA_FRASE!_";
         final MessageDigest digest = MessageDigest.getInstance("SHA-1");
-        digest.update("clave".getBytes("UTF-8"));
-        final SecretKeySpec key = new SecretKeySpec(digest.digest(), 0, 16, "AES");
+        digest.update(frase.getBytes("UTF-8"));
+        SecretKeySpec key = new SecretKeySpec(digest.digest(), 0, 16, "AES");
+        return key;
+    }
+    
+    private static Cipher obtieneCipher(boolean paraCifrar, SecretKey key) throws Exception {
+       
 
         final Cipher aes = Cipher.getInstance("AES/ECB/PKCS5Padding");
         if (paraCifrar) {
@@ -236,12 +251,12 @@ public class PasswordHash {
             // Test password validation
             boolean failure = false;
             byte[] cifrado = cifra("Hola");
-            
+
             String hex = toHex(cifrado);
-            
-            System.out.println(cifrado.length+ " "+new String(encodeBase64(cifrado))+" "+hex);
+
+            System.out.println(cifrado.length + " " + new String(encodeBase64(cifrado)) + " " + hex);
             System.out.println(descifra(fromHex(hex)));
-            
+
             //System.out.println(Security.getProviders()[0].getName());
             System.out.println("Running tests...");
             for (int i = 0; i < 100; i++) {

@@ -52,6 +52,8 @@ public class ControlUsuarios extends HttpServlet {
                     });
             
             response.setContentType("text/html;charset=UTF-8");
+            
+            j.setPassword(PasswordHash.createHash(j.getPassword()));
             try (PrintWriter out = response.getWriter()) {
                 /* TODO output your page here. You may use following sample code. */
                 out.println("<!DOCTYPE html>");

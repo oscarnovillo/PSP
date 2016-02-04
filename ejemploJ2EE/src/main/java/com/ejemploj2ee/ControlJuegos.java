@@ -19,7 +19,7 @@ import services.ServiciosJuegos;
  *
  * @author oscar
  */
-@WebServlet(name = "ControlJuegos", urlPatterns = {"/controlJuegos"})
+@WebServlet(name = "ControlJuegos", urlPatterns = {"/juegos"})
 public class ControlJuegos extends HttpServlet {
 
     /**

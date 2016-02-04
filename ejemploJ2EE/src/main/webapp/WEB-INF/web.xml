@@ -25,4 +25,12 @@
         <param-name>test</param-name>
         <param-value>prueba</param-value>
     </context-param>
+    <filter-mapping>
+        <filter-name>LoginFilter</filter-name>
+        <url-pattern>/juegos</url-pattern>
+    </filter-mapping>
+    <filter-mapping>
+        <filter-name>FilterJson</filter-name>
+        <url-pattern>/juegos</url-pattern>
+    </filter-mapping>
 </web-app>
