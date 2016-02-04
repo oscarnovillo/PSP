@@ -41,9 +41,10 @@ public class ClienteWebCifrado {
 
     public static void main(String[] args) {
 
+        final String url = "http://quevedo2dam.azurewebsites.net";
         CloseableHttpClient httpclient = HttpClients.createDefault();
         try {
-            HttpGet httpGet = new HttpGet("http://localhost:8080/login");
+            HttpGet httpGet = new HttpGet(url+"/login");
             HttpClientContext context = HttpClientContext.create();
 
             CloseableHttpResponse response1 = httpclient.execute(httpGet, context);
@@ -92,9 +93,9 @@ public class ClienteWebCifrado {
      
 
             System.out.println("----Segunda llamada");
-            httpGet = new HttpGet("http://localhost:8080/juegos?command=get");
+            httpGet = new HttpGet(url+"/juegos?command=get");
 
-            httpclient = HttpClients.createDefault();
+            
             response1 = httpclient.execute(httpGet, context);
 
             entity1 = response1.getEntity();
