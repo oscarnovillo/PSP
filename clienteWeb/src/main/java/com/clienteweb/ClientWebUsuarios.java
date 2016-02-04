@@ -43,8 +43,6 @@ public class ClientWebUsuarios {
     
             
             nvps.add(new BasicNameValuePair("user",mandar));
-
-            
             
             httpPost.setEntity(new UrlEncodedFormEntity(nvps));
             CloseableHttpResponse response2 = httpclient.execute(httpPost);

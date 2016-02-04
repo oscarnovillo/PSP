@@ -4,6 +4,7 @@ import java.io.*;
 
 import java.security.*;
 import java.security.spec.*;
+import java.util.Base64;
 
 import javax.crypto.*;
 import javax.crypto.interfaces.*;
@@ -17,7 +18,7 @@ import org.bouncycastle.jce.provider.BouncyCastleProvider;
 public class AlmacenarClaves {
 	public static void main(String[] args) throws Exception {
 
-                String nombre = "test1";
+                String nombre = "server1024";
                 
 		System.out.println("Crea los ficheros "+nombre+".secreta, "
 				+nombre+".publica, "+nombre+".privada");
@@ -43,16 +44,19 @@ public class AlmacenarClaves {
 		FileOutputStream out = new FileOutputStream(nombre + ".privada");
 		out.write(pkcs8Spec.getEncoded());
 		out.close();
-
+            System.out.println(pkcs8Spec.getEncoded().length);
 		/*** 2 Recuperar clave Privada del fichero */
 		// 2.1 Leer datos binarios PKCS8
 		byte[] bufferPriv = new byte[5000];
 		FileInputStream in = new FileInputStream(nombre + ".privada");
-		in.read(bufferPriv, 0, 5000);
+		          int chars = in.read(bufferPriv, 0, 5000);
 		in.close();
+                
+                byte[] bufferPriv2 = new byte[chars];
+                System.arraycopy(bufferPriv, 0, bufferPriv2, 0, chars);
 
 		// 2.2 Recuperar clave privada desde datos codificados en formato PKCS8
-		PKCS8EncodedKeySpec clavePrivadaSpec = new PKCS8EncodedKeySpec(bufferPriv);
+		PKCS8EncodedKeySpec clavePrivadaSpec = new PKCS8EncodedKeySpec(bufferPriv2);
                 
 		PrivateKey clavePrivada2 = keyFactoryRSA.generatePrivate(clavePrivadaSpec);
 
@@ -68,12 +72,12 @@ public class AlmacenarClaves {
 		out = new FileOutputStream(nombre + ".publica");
 		out.write(x509Spec.getEncoded());
 		out.close();
-
+            System.out.println(x509Spec.getEncoded().length);
 		/*** 4 Recuperar clave PUBLICA del fichero */
 		// 4.1 Leer datos binarios x809
-		byte[] bufferPub = new byte[5000];
+		byte[] bufferPub = new byte[162];
 		in = new FileInputStream(nombre + ".publica");
-		in.read(bufferPub, 0, 5000);
+		in.read(bufferPub, 0, 162);
 		in.close();
 
 		// 4.2 Recuperar clave publica desde datos codificados en formato X509
@@ -88,6 +92,8 @@ public class AlmacenarClaves {
 		KeyGenerator generadorDES = KeyGenerator.getInstance("DES");
 		generadorDES.init(56);
 		SecretKey claveSecreta = generadorDES.generateKey();
+                
+                
 
 		/*** Crear SecretKeyFactory usado para las transformaciones de claves secretas*/
 		SecretKeyFactory secretKeyFactoryDES = SecretKeyFactory.getInstance("DES");
