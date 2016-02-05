@@ -75,7 +75,8 @@ public class LoginFilter implements Filter {
 
         Throwable problem = null;
         try {
-            HttpSession sesion = ((HttpServletRequest) request).getSession();
+            HttpSession sesion = 
+                    ((HttpServletRequest) request).getSession();
             if (sesion.getAttribute("login") == null || sesion.getAttribute("login") != "OK") {
                 System.out.println("ERROR DE LOGIN");
                 ((HttpServletRequest) request).getRequestDispatcher("/error.jsp").forward(request, response);
