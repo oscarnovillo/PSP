@@ -23,6 +23,22 @@ public class ServiciosJuegos {
         juegos = juegosDAO.getAllJuegos();
         return juegos;
     }
+ 
+    public ArrayList<Juego> getAllJuegos(String conn)
+    {
+        ArrayList<Juego> juegos =null;
+        JuegosDAO juegosDAO = new JuegosDAO();
+        juegos = juegosDAO.getAllJuegos(conn);
+        return juegos;
+    }
+    
+    public ArrayList<Juego> getAllJuegosMySQL()
+    {
+        ArrayList<Juego> juegos =null;
+        JuegosDAO juegosDAO = new JuegosDAO();
+        juegos = juegosDAO.getAllJuegosMySQL();
+        return juegos;
+    }
     
     public void updateJuego(Juego j)
     {

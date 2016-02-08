@@ -34,6 +34,26 @@ public class DBConnection {
         return connection;
     }
     
+    public Connection getConnection(String conn) throws ClassNotFoundException {
+        Class.forName("com.microsoft.sqlserver.jdbc.SQLServerDriver");
+        Connection connection = null;
+        try {
+            connection = DriverManager.getConnection(conn);
+        } catch (SQLException ex) {
+        }
+        return connection;
+    }
+    
+    public Connection getConnectionMysql(String conn,String user, String pass) throws ClassNotFoundException {
+        Class.forName("com.mysql.jdbc.Driver");
+        Connection connection = null;
+        try {
+            connection = DriverManager.getConnection(conn,user,pass);
+        } catch (SQLException ex) {
+        }
+        return connection;
+    }
+    
     public void cerrarConexion( Connection connection )
     {
         try {
