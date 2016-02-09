@@ -12,11 +12,13 @@ import java.io.IOException;
 import java.io.PrintWriter;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import javax.crypto.SecretKey;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import org.apache.commons.codec.binary.Base64;
 
 /**
  *
@@ -39,8 +41,9 @@ public class ControllerPeliculas extends HttpServlet {
 
         String op = request.getParameter("op");
         Juego j = new Juego("gow", 1);
-        request.setAttribute("juego", j);
-
+        ObjectMapper mapper = new ObjectMapper();
+        String obj = mapper.writeValueAsString(j);
+        response.getWriter().print(obj);
     }
 
 // <editor-fold defaultstate="collapsed" desc="HttpServlet methods. Click on the + sign on the left to edit the code.">
