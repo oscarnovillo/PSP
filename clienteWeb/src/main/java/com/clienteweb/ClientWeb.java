@@ -54,7 +54,6 @@ public class ClientWeb {
                 // and ensure it is fully consumed
                 try {
                     ObjectMapper mapper = new ObjectMapper();
-
                     mapper.configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);
                     Juego j = mapper.readValue(entity1.getContent(),
                             new TypeReference<Juego>() {
