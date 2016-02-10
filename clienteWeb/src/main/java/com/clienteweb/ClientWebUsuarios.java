@@ -52,7 +52,11 @@ public class ClientWebUsuarios {
                 HttpEntity entity2 = response2.getEntity();
                 // do something useful with the response body
                 // and ensure it is fully consumed
-                System.out.println(EntityUtils.toString(entity2,"UTF-8"));
+                String numero =EntityUtils.toString(entity2,"UTF-8") ;
+                byte [] bites = Base64.decodeBase64(numero);
+                System.out.println(numero);
+                System.out.println(new String(bites));
+                System.out.println(PasswordHash.descifra(bites));
                 EntityUtils.consume(entity2);
             } finally {
                 response2.close();
