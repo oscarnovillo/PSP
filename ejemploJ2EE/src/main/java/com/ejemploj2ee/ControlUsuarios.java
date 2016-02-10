@@ -55,20 +55,9 @@ public class ControlUsuarios extends HttpServlet {
             
             j.setPassword(PasswordHash.createHash(j.getPassword()));
             
-            
-            try (PrintWriter out = response.getWriter()) {
-                /* TODO output your page here. You may use following sample code. */
-                out.println("<!DOCTYPE html>");
-                out.println("<html>");
-                out.println("<head>");
-                out.println("<title> Servlet ServletSession</title>");
-                out.println("</head>");
-                out.println("<body>");
-                out.println(request.getParameter("user"));
-                out.println("<h1>" + j.getLogin()+j.getPassword() + "</h1>");
-                out.println("</body>");
-                out.println("</html>");
-            }
+            String mandar = new String(Base64.encodeBase64(
+                    PasswordHash.cifra("1")));
+            response.getWriter().print(mandar);
             
         }   catch (Exception ex) {
             Logger.getLogger(ControlUsuarios.class.getName()).log(Level.SEVERE, null, ex);

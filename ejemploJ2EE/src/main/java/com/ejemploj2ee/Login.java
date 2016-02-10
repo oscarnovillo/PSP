@@ -59,6 +59,8 @@ public class Login extends HttpServlet {
         try {
             request.getSession().setAttribute("login", "OK");
 
+            
+            
             //Pasar password simetrica sobre asimetrico.
             Security.addProvider(new BouncyCastleProvider());  // Cargar el provider BC
             Security.addProvider(new org.bouncycastle.jce.provider.BouncyCastleProvider());

@@ -77,10 +77,13 @@ public class LoginFilter implements Filter {
         try {
             HttpSession sesion = 
                     ((HttpServletRequest) request).getSession();
-            if (sesion.getAttribute("login") == null || sesion.getAttribute("login") != "OK") {
+            if (sesion.getAttribute("login") == null 
+                    || sesion.getAttribute("login") != "OK") {
                 System.out.println("ERROR DE LOGIN");
-                ((HttpServletRequest) request).getRequestDispatcher("/error.jsp").forward(request, response);
+                ((HttpServletRequest) request).getRequestDispatcher("/error.jsp")
+                        .forward(request, response);
             } else {
+                
                 chain.doFilter(request, response);
             }
         } catch (Throwable t) {
