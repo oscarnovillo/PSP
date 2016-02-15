@@ -43,6 +43,7 @@ import java.io.IOException;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.websocket.ClientEndpoint;
+import javax.websocket.OnClose;
 import javax.websocket.OnError;
 import javax.websocket.OnMessage;
 import javax.websocket.OnOpen;
@@ -53,8 +54,10 @@ import javax.websocket.Session;
  */
 @ClientEndpoint
 public class MyClient {
+    private Session session;
     @OnOpen
     public void onOpen(Session session) {
+        this.session = session;
         System.out.println("Connected to endpoint: " + session.getBasicRemote());
         try {
             String name = "Duke";
@@ -64,6 +67,9 @@ public class MyClient {
             Logger.getLogger(MyClient.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
+    
+   
+
     
     @OnMessage
     public void processMessage(String message) {

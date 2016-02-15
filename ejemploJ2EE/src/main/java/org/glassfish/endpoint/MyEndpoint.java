@@ -45,6 +45,7 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.websocket.CloseReason;
 import javax.websocket.EndpointConfig;
+import javax.websocket.OnClose;
 import javax.websocket.OnMessage;
 import javax.websocket.OnOpen;
 import javax.websocket.Session;
@@ -58,21 +59,39 @@ public class MyEndpoint {
 
    @OnOpen
    public void onOpen(Session session, EndpointConfig config){
-//       try {
-//           // System.out.println(session.getRequestParameterMap().get("usuario"));
-//           if (config.getUserProperties().get("login")==null)
-//                session.close(new CloseReason(CloseReason.CloseCodes.CANNOT_ACCEPT, "not login"));
-//           //session.close();
-//       } catch (IOException ex) {
-//           Logger.getLogger(MyEndpoint.class.getName()).log(Level.SEVERE, null, ex);
-//       }
-//       
+       System.out.println(session.getRequestParameterMap().get("usuario").get(0));
+       session.getUserProperties().put("user", session.getRequestParameterMap().get("usuario").get(0));
+       
    }
     
+   @OnClose
+   public void onClose(Session session)
+   {
+        for (Session s : session.getOpenSessions())
+        {
+            try {
+                System.out.println(s.getUserProperties().get("user"));
+                s.getBasicRemote().sendText("SALIDO "+session.getUserProperties().get("user").toString());
+            } catch (IOException ex) {
+                Logger.getLogger(MyEndpoint.class.getName()).log(Level.SEVERE, null, ex);
+            }
+        }
+   }
+   
+   
     @OnMessage
-    public String echoText(String name,Session session) {
-        session.getUserProperties().put("nombre", name);
-        return name;
+    public void echoText(String name,Session session) {
+        session.getUserProperties().put("text", name);
+        for (Session s : session.getOpenSessions())
+        {
+            try {
+                System.out.println(s.getUserProperties().get("text"));
+                s.getBasicRemote().sendText(session.getUserProperties().get("user")+"::"+name);
+            } catch (IOException ex) {
+                Logger.getLogger(MyEndpoint.class.getName()).log(Level.SEVERE, null, ex);
+            }
+        }
+       
     }
 
     @OnMessage
@@ -83,6 +102,7 @@ public class MyEndpoint {
             builder.append(b);
         }
         System.out.println(builder);
+        
         for (Session s : session.getOpenSessions())
         {
             System.out.println(s.getUserProperties().get("nombre"));

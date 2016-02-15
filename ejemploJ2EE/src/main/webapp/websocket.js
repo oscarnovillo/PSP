@@ -38,7 +38,7 @@
  * holder.
  */
 
-var wsUri = "ws://quevedo2dam.azurewebsites.net/websocket";
+var wsUri = "ws://localhost:8080/websocket?usuario=pepe";
 console.log("Connecting to " + wsUri);
 var websocket = new WebSocket(wsUri);
 websocket.onopen = function(evt) { onOpen(evt) };
