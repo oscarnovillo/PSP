@@ -92,26 +92,28 @@ public class FilterJson implements Filter {
 	PrintWriter respOut = new PrintWriter(response.getWriter());
 	respOut.println("<P><B>This has been appended by an intrusive filter.</B>");
          */
-       /* try {
+ /* try {
                 ObjectMapper mapper = new ObjectMapper();
                 mapper.writeValue(response.getOutputStream(), request.getAttribute("juego"));
             } catch (IOException ex) {
 
             }
-        */
+         */
         try {
             ObjectMapper mapper = new ObjectMapper();
-            String obj = mapper.writeValueAsString(request.getAttribute("juego"));
-            SecretKey key = (SecretKey)((HttpServletRequest)request).getSession().getAttribute("clave");
-            byte[] bytes = Utils.PasswordHash.cifra(obj,key);
-            String mandar = new String(Base64.encodeBase64(bytes));
-            response.getWriter().print(mandar);
+            if (request.getAttribute("juego") != null) {
+                String obj = mapper.writeValueAsString(
+                        request.getAttribute("juego"));
+                SecretKey key = (SecretKey) ((HttpServletRequest) request).getSession().getAttribute("clave");
+                byte[] bytes = Utils.PasswordHash.cifra(obj, key);
+                String mandar = new String(Base64.encodeBase64(bytes));
+                response.getWriter().print(mandar);
+            }
         } catch (IOException ex) {
 
         } catch (Exception ex) {
             Logger.getLogger(FilterJson.class.getName()).log(Level.SEVERE, null, ex);
         }
-       
 
     }
 

@@ -60,7 +60,8 @@ public class MyEndpoint {
    @OnOpen
    public void onOpen(Session session, EndpointConfig config){
        System.out.println(session.getRequestParameterMap().get("usuario").get(0));
-       session.getUserProperties().put("user", session.getRequestParameterMap().get("usuario").get(0));
+       session.getUserProperties().put("user", 
+               session.getRequestParameterMap().get("usuario").get(0));
        
    }
     
@@ -80,13 +81,13 @@ public class MyEndpoint {
    
    
     @OnMessage
-    public void echoText(String name,Session session) {
-        session.getUserProperties().put("text", name);
+    public void echoText(String mensaje,Session session) {
+        session.getUserProperties().put("text", mensaje);
         for (Session s : session.getOpenSessions())
         {
             try {
                 System.out.println(s.getUserProperties().get("text"));
-                s.getBasicRemote().sendText(session.getUserProperties().get("user")+"::"+name);
+                s.getBasicRemote().sendText(session.getUserProperties().get("user")+"::"+mensaje);
             } catch (IOException ex) {
                 Logger.getLogger(MyEndpoint.class.getName()).log(Level.SEVERE, null, ex);
             }

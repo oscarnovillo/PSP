@@ -37,6 +37,8 @@ public class ControlJuegos extends HttpServlet {
         if (comando != null) {
             switch (comando) {
                 case "put":
+                    
+                    response.getWriter().print("OK");
                     break;
                 case "delete":
                     

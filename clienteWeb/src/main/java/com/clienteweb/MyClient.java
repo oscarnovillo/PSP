@@ -55,6 +55,7 @@ import javax.websocket.Session;
 @ClientEndpoint
 public class MyClient {
     private Session session;
+    
     @OnOpen
     public void onOpen(Session session) {
         this.session = session;
