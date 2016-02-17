@@ -26,20 +26,13 @@ ChatClientEndpoint clientEndPoint2;
      */
     public NewJFrame() {
         initComponents();
-        try {
+//        try {
 //            container = ContainerProvider.getWebSocketContainer();
 //            String uri = "ws://localhost:8080/endpoint/websocket";
 //            System.out.println("Connecting to " + uri);
 //            
 //            container.connectToServer(MyClient.class, URI.create(uri) );
-
-            clientEndPoint2 = new ChatClientEndpoint(new URI("ws://quevedo2dam.azurewebsites.net/chat/java"));
-            clientEndPoint2.addMessageHandler(responseString -> {
-
-                System.out.println(responseString+" 3");
-
-            });
-
+//           
 //            clientEndPoint = new ChatClientEndpoint(new URI("http://localhost:8080/endpoint/chat/arduino"));
 //            clientEndPoint.addMessageHandler(responseString -> {
 //                System.out.println(responseString);
@@ -51,11 +44,11 @@ ChatClientEndpoint clientEndPoint2;
 //		clientEndPoint.addMessageHandler(responseString -> {
 //			System.out.println(responseString);
 //		});
-        } catch (URISyntaxException ex) {
-            Logger.getLogger(NewJFrame.class.getName()).log(Level.SEVERE, null, ex);
-        } catch (Exception e) {
-            System.out.println(e.getMessage());
-        }
+//        } catch (URISyntaxException ex) {
+//            Logger.getLogger(NewJFrame.class.getName()).log(Level.SEVERE, null, ex);
+//        } catch (Exception e) {
+//            System.out.println(e.getMessage());
+//        }
     }
 
     /**
