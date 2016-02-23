@@ -19,13 +19,12 @@ import javax.swing.JOptionPane;
 public class PequeChatFrame extends javax.swing.JFrame {
 
     MyClient client = null;
-     
+
     /**
      * Creates new form PequeChatFrame
      */
     public PequeChatFrame() {
         initComponents();
-        
 
     }
 
@@ -126,8 +125,14 @@ public class PequeChatFrame extends javax.swing.JFrame {
     private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
         try {
             // TODO add your handling code here:
-            client = new MyClient(new URI("ws://localhost:8080/websocket?usuario=pp"));
-            client.addMessageHandler(new AtiendeMensajes());
+            client = new MyClient(new URI("ws://localhost:8080/websocket/pp"));
+            client.addMessageHandler(new MyClient.MessageListener() {
+                @Override
+                public void handleMessage(Mensaje message) {
+                    
+                    jTextArea1.append(message.getFrom() + "::" + message.getMensaje());
+                }
+            });
         } catch (URISyntaxException ex) {
             JOptionPane.showMessageDialog(this, ex.getMessage());
         }
@@ -142,17 +147,6 @@ public class PequeChatFrame extends javax.swing.JFrame {
         client.sendMessage(m);
     }//GEN-LAST:event_jButton2ActionPerformed
 
-    
-    
-    
-    private class AtiendeMensajes implements MyClient.MessageHandler {
-
-        @Override
-        public void handleMessage(Mensaje message) {
-            jTextArea1.append(message.getFrom() + "::" + message.getMensaje());
-        }
-
-    }
 
     /**
      * @param args the command line arguments

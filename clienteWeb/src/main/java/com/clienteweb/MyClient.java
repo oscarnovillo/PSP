@@ -66,7 +66,7 @@ import org.glassfish.tyrus.client.ClientManager;
 @ClientEndpoint
 public class MyClient {
     private Session userSession;
-    private MessageHandler messageHandler;
+    private MessageListener messageHandler;
     
     public MyClient( URI endpointURI) {
          try {
@@ -87,7 +87,7 @@ public class MyClient {
        
     }
     
-    public void addMessageHandler(final MessageHandler msgHandler) {
+    public void addMessageHandler(final MessageListener msgHandler) {
         messageHandler = msgHandler;
     }
 
@@ -128,7 +128,7 @@ public class MyClient {
     }
     
     
-    public static interface MessageHandler {
+    public static interface MessageListener {
 
         public void handleMessage(Mensaje message);
     }
