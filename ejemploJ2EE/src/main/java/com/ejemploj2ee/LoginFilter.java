@@ -75,6 +75,12 @@ public class LoginFilter implements Filter {
 
         Throwable problem = null;
         try {
+            String param = request.getParameter("objeto");
+            //descifro 
+            request.setAttribute("objeto", "descifrado");
+            
+            
+            
             HttpSession sesion = 
                     ((HttpServletRequest) request).getSession();
             if (sesion.getAttribute("login") == null 

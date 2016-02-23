@@ -40,6 +40,7 @@
 package org.glassfish.endpoint;
 
 import com.datoshttp.MetaMensajeWS;
+import com.datoshttp.OrdenWS;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -53,20 +54,23 @@ import javax.websocket.OnClose;
 import javax.websocket.OnMessage;
 import javax.websocket.OnOpen;
 import javax.websocket.Session;
+import javax.websocket.server.PathParam;
 import javax.websocket.server.ServerEndpoint;
+import model.UserWS;
 
 /**
  * @author Arun Gupta
  */
-@ServerEndpoint(value = "/websocket", configurator = ServletAwareConfig.class)
+@ServerEndpoint(value = "/websocket/{user}", configurator = ServletAwareConfig.class)
 public class MyEndpoint {
 
     @OnOpen
-    public void onOpen(Session session, EndpointConfig config) {
+    public void onOpen(Session session, @PathParam("user") final String user, EndpointConfig config) {
         System.out.println(session.getRequestParameterMap().get("usuario").get(0));
+        UserWS u = new UserWS();
+        u.setUser(user);
         session.getUserProperties().put("user",
-                session.getRequestParameterMap().get("usuario").get(0));
-
+                u);
     }
 
     @OnClose
@@ -94,7 +98,7 @@ public class MyEndpoint {
                 case MENSAJE:
                     for (Session s : session.getOpenSessions()) {
                         try {
-                            String men = mapper.writeValueAsString(meta.getContenido());  
+                            String men = mapper.writeValueAsString(meta.getContenido());
                             s.getBasicRemote().sendText(men);
                         } catch (IOException ex) {
                             Logger.getLogger(MyEndpoint.class.getName()).log(Level.SEVERE, null, ex);
@@ -102,6 +106,15 @@ public class MyEndpoint {
                     }
                     break;
                 case ORDEN:
+                    OrdenWS orden = mapper.readValue(mensaje,
+                            new TypeReference<OrdenWS>() {
+                    });
+                    if (orden.getOrden().equals("ADD"))
+                    {
+                        UserWS u = (UserWS)session.getUserProperties().get("user");
+                       //
+                       ///u.setRoom(room);
+                    }
                     break;
             }
         } catch (IOException ex) {
