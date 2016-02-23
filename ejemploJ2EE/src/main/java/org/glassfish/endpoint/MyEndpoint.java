@@ -88,6 +88,7 @@ public class MyEndpoint {
     @OnMessage
     public void echoText(String mensaje, Session session) {
         try {
+            
             ObjectMapper mapper = new ObjectMapper();
             mapper.configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);
             MetaMensajeWS meta = mapper.readValue(mensaje,
