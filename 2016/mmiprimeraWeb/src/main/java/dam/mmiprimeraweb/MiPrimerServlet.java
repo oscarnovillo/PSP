@@ -33,17 +33,22 @@ public class MiPrimerServlet extends HttpServlet {
      */
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        
-        String kilos = getServletConfig().getInitParameter("kilos");
-            String w = request.getParameter("w");
-            
-            int iKilos = Integer.parseInt(kilos);
-            iKilos  -= (Integer.parseInt(w)/30);
-            
-            
-            request.setAttribute("message","Kilo "+iKilos);
-            request.getRequestDispatcher("/newjsp.jsp").forward(request, response);
 
+        String kilos = getServletConfig().getInitParameter("kilos");
+        String w = request.getParameter("w");
+        if (w != null) {
+            try
+            {
+            int iKilos = Integer.parseInt(kilos);
+            iKilos -= (Integer.parseInt(w) / 30);
+
+            request.setAttribute("message", "Kilo " + iKilos);
+            request.getRequestDispatcher("/newjsp.jsp").forward(request, response);
+            }
+            catch(Exception e)
+            {}
+        }
+        request.getRequestDispatcher("/error.jsp").forward(request, response);
 //        response.setContentType("text/html;charset=UTF-8");
 //        try (PrintWriter out = response.getWriter()) {
 //            /* TODO output your page here. You may use following sample code. */
