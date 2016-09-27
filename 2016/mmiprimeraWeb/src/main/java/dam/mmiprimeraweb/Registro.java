@@ -9,7 +9,6 @@ import java.io.IOException;
 import java.io.PrintWriter;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
-import javax.servlet.annotation.WebInitParam;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -18,9 +17,8 @@ import javax.servlet.http.HttpServletResponse;
  *
  * @author oscar
  */
-@WebServlet(name = "MiPrimerServlet", urlPatterns = {"/paquito"}, initParams = {
-    @WebInitParam(name = "kilos", value = "100")})
-public class MiPrimerServlet extends HttpServlet {
+@WebServlet(name = "Registro", urlPatterns = {"/Registro"})
+public class Registro extends HttpServlet {
 
     /**
      * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
@@ -33,28 +31,19 @@ public class MiPrimerServlet extends HttpServlet {
      */
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-
-        String kilos = (String) request.getSession().getAttribute("peso");
-        if (kilos == null) {
-            kilos = getServletConfig().getInitParameter("kilos");
+        // Mirar si habia alguien
+        if (request.getSession().getAttribute("nombre") == null) {
+            //Registrar el usuario
+            request.getSession().setAttribute("nombre",
+                    request.getParameter("nombre"));
+            request.getSession().setAttribute("peso",
+                    request.getParameter("peso"));
+            //Bienvenida
+            request.getRequestDispatcher("/welcome.jsp").forward(request, response);
+        } else {
+            //error
+            request.getRequestDispatcher("/error.jsp").forward(request, response);
         }
-
-        String w = request.getParameter("w");
-        if (w != null) {
-            try {
-                int iKilos = Integer.parseInt(kilos);
-                iKilos -= (Integer.parseInt(w) / 30);
-                String nombre = (String)request.getSession().getAttribute("nombre");
-                request.getSession().setAttribute("peso", iKilos + "");
-                request.setAttribute("message", nombre +" pesa Kilos " + iKilos);
-
-                int i = 0;
-
-                request.getRequestDispatcher("/newjsp.jsp").forward(request, response);
-            } catch (Exception e) {
-            }
-        }
-        request.getRequestDispatcher("/error.jsp").forward(request, response);
 
     }
 
