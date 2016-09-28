@@ -7,6 +7,11 @@ package dam.mmiprimeraweb;
 
 import java.io.IOException;
 import java.io.PrintWriter;
+import java.time.Duration;
+import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.time.Month;
+import java.time.Period;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.annotation.WebInitParam;
@@ -38,7 +43,9 @@ public class MiPrimerServlet extends HttpServlet {
         if (kilos == null) {
             kilos = getServletConfig().getInitParameter("kilos");
         }
-
+        LocalDateTime ultimavez = (LocalDateTime) request.getSession().getAttribute("fecha");
+        if (ultimavez == null) ultimavez = LocalDateTime.now();
+        LocalDateTime ahora = LocalDateTime.now();
         String w = request.getParameter("w");
         if (w != null) {
             try {
@@ -46,12 +53,15 @@ public class MiPrimerServlet extends HttpServlet {
                 iKilos -= (Integer.parseInt(w) / 30);
                 String nombre = (String)request.getSession().getAttribute("nombre");
                 request.getSession().setAttribute("peso", iKilos + "");
-                request.setAttribute("message", nombre +" pesa Kilos " + iKilos);
+                request.getSession().setAttribute("fecha", ahora);
+                Duration segundos = Duration.between(ultimavez, ahora);
+                request.setAttribute("message", segundos.getSeconds()+"  "+nombre +" pesa Kilos " + iKilos);
 
                 int i = 0;
 
                 request.getRequestDispatcher("/newjsp.jsp").forward(request, response);
             } catch (Exception e) {
+                System.out.println(e.getMessage());
             }
         }
         request.getRequestDispatcher("/error.jsp").forward(request, response);
