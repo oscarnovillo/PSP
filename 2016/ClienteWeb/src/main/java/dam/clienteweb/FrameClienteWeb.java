@@ -7,6 +7,7 @@ package dam.clienteweb;
 
 import javax.swing.JOptionPane;
 import javax.swing.plaf.OptionPaneUI;
+import negocio.CalculoPeso;
 
 /**
  *
@@ -21,9 +22,8 @@ public class FrameClienteWeb extends javax.swing.JFrame {
         initComponents();
     }
 
-    String nombre = "";
-    String peso = "";
-    
+    CalculoPeso cp = new CalculoPeso();
+
     /**
      * This method is called from within the constructor to initialize the form.
      * WARNING: Do NOT modify this code. The content of this method is always
@@ -110,18 +110,22 @@ public class FrameClienteWeb extends javax.swing.JFrame {
 
     private void jButtonRegistroActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonRegistroActionPerformed
         // TODO add your handling code here:
-        nombre = jTextFieldNombre.getText();
-        peso = jTextFieldPeso.getText();
-        
-        JOptionPane.showMessageDialog(this,"Registrado "+ nombre+" "+peso, "Titulo", JOptionPane.INFORMATION_MESSAGE);
+       String nombre = jTextFieldNombre.getText();
+        String peso = jTextFieldPeso.getText();
+
+        cp.registro(nombre,peso);
+        JOptionPane.showMessageDialog(this, "Registrado " + nombre + " " + peso, "Titulo", JOptionPane.INFORMATION_MESSAGE);
     }//GEN-LAST:event_jButtonRegistroActionPerformed
 
     private void jButtonEjercicioActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonEjercicioActionPerformed
         // TODO add your handling code here:
         String workout = jTextFieldWorkout.getText();
 
-        JOptionPane.showMessageDialog(this,""+ nombre+" ejercicio "+workout+" ", "Titulo", JOptionPane.INFORMATION_MESSAGE);
-        
+
+        cp.adelgazamiento(workout);
+
+        JOptionPane.showMessageDialog(this, "" +cp.getNombre() + " peso actual " + cp.getPeso() + " ", "Titulo", JOptionPane.INFORMATION_MESSAGE);
+
     }//GEN-LAST:event_jButtonEjercicioActionPerformed
 
     /**

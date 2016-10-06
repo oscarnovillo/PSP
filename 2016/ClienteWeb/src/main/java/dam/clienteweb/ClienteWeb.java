@@ -6,6 +6,7 @@
 package dam.clienteweb;
 
 import javafx.application.Application;
+import static javafx.application.Application.launch;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.fxml.FXMLLoader;
@@ -26,7 +27,7 @@ public class ClienteWeb extends Application {
         Parent root = FXMLLoader.load(getClass().getResource("/fxml/FXMLCliente.fxml"));
         
         Scene scene = new Scene(root);
-        scene.getStylesheets().add("/styles/Styles.css");
+        scene.getStylesheets().add("/styles/fxmlcliente.css");
         
         stage.setTitle("JavaFX and Maven");
         stage.setScene(scene);
