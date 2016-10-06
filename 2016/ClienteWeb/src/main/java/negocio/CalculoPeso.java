@@ -45,6 +45,7 @@ public class CalculoPeso {
     public String adelgazamiento(String workout)
     {
         ultimallamada = LocalDateTime.now();
+        
         int iPeso = Integer.parseInt(peso);
         iPeso -= 30 / Integer.parseInt(workout);
         peso = iPeso + "";

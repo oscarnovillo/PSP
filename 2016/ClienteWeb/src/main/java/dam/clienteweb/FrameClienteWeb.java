@@ -110,10 +110,10 @@ public class FrameClienteWeb extends javax.swing.JFrame {
 
     private void jButtonRegistroActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonRegistroActionPerformed
         // TODO add your handling code here:
-       String nombre = jTextFieldNombre.getText();
+        String nombre = jTextFieldNombre.getText();
         String peso = jTextFieldPeso.getText();
 
-        cp.registro(nombre,peso);
+        cp.registro(nombre, peso);
         JOptionPane.showMessageDialog(this, "Registrado " + nombre + " " + peso, "Titulo", JOptionPane.INFORMATION_MESSAGE);
     }//GEN-LAST:event_jButtonRegistroActionPerformed
 
@@ -121,10 +121,9 @@ public class FrameClienteWeb extends javax.swing.JFrame {
         // TODO add your handling code here:
         String workout = jTextFieldWorkout.getText();
 
-
         cp.adelgazamiento(workout);
 
-        JOptionPane.showMessageDialog(this, "" +cp.getNombre() + " peso actual " + cp.getPeso() + " ", "Titulo", JOptionPane.INFORMATION_MESSAGE);
+        JOptionPane.showMessageDialog(this, "" + cp.getNombre() + " peso actual " + cp.getPeso() + " ", "Titulo", JOptionPane.INFORMATION_MESSAGE);
 
     }//GEN-LAST:event_jButtonEjercicioActionPerformed
 
