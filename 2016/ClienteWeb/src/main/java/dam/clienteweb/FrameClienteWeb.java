@@ -5,6 +5,8 @@
  */
 package dam.clienteweb;
 
+import config.Configuration;
+import config.ConfigurationXML;
 import javax.swing.JOptionPane;
 import javax.swing.plaf.OptionPaneUI;
 import negocio.CalculoPeso;
@@ -114,7 +116,7 @@ public class FrameClienteWeb extends javax.swing.JFrame {
         String peso = jTextFieldPeso.getText();
 
         cp.registro(nombre, peso);
-        JOptionPane.showMessageDialog(this, "Registrado " + nombre + " " + peso, "Titulo", JOptionPane.INFORMATION_MESSAGE);
+        JOptionPane.showMessageDialog(this, ConfigurationXML.getInstance().getPro().get("key")+"Registrado " + nombre + " " + peso, "Titulo", JOptionPane.INFORMATION_MESSAGE);
     }//GEN-LAST:event_jButtonRegistroActionPerformed
 
     private void jButtonEjercicioActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonEjercicioActionPerformed

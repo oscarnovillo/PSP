@@ -7,16 +7,16 @@
 <?import javafx.scene.control.*?>
 <?import javafx.scene.layout.*?>
 
-<AnchorPane id="AnchorPane" prefHeight="400.0" prefWidth="600.0" styleClass="mainFxmlClass" xmlns:fx="http://javafx.com/fxml/1" xmlns="http://javafx.com/javafx/8" fx:controller="dam.clienteweb.FXMLClienteController">
+<AnchorPane id="AnchorPane" prefHeight="400.0" prefWidth="600.0" styleClass="mainFxmlClass" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="dam.clienteweb.FXMLClienteController">
     <stylesheets>
         <URL value="@fxmlcliente.css" />
     </stylesheets>
    <children>
-      <Button layoutX="238.0" layoutY="117.0" mnemonicParsing="false" text="Button" />
-      <TextField layoutX="73.0" layoutY="72.0" />
-      <TextField layoutX="73.0" layoutY="117.0" />
+      <Button fx:id="btRegistro" layoutX="238.0" layoutY="117.0" mnemonicParsing="false" onAction="#handleButtonRegistro" text="Registro" />
+      <TextField fx:id="txtNombre" layoutX="73.0" layoutY="72.0" />
+      <TextField fx:id="txtPeso" layoutX="73.0" layoutY="117.0" />
       <TextField layoutX="73.0" layoutY="215.0" />
-      <Button layoutX="238.0" layoutY="215.0" mnemonicParsing="false" text="Button" />
+      <Button fx:id="btWorkout" layoutX="238.0" layoutY="215.0" mnemonicParsing="false" text="Workout" />
       <Label layoutX="14.0" layoutY="76.0" text="Nombre" />
       <Label layoutX="14.0" layoutY="121.0" text="Peso" />
       <Label layoutX="14.0" layoutY="219.0" text="Workout" />
