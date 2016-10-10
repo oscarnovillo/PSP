@@ -16,7 +16,7 @@ import org.yaml.snakeyaml.Yaml;
  */
 public class Configuration {
     
-    private static Configuration config;
+   private static Configuration config;
    private String pathBase;
     
     public static Configuration getInstance(InputStream in,String pathBase)
