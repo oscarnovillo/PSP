@@ -32,18 +32,20 @@ public class Registro extends HttpServlet {
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         // Mirar si habia alguien
-        if (request.getSession().getAttribute("nombre") == null) {
+        //if (request.getSession().getAttribute("nombre") == null) {
             //Registrar el usuario
             request.getSession().setAttribute("nombre",
                     request.getParameter("nombre"));
             request.getSession().setAttribute("peso",
                     request.getParameter("peso"));
+            
+            response.getWriter().print("{key : \"valor\"}");
             //Bienvenida
-            request.getRequestDispatcher("/welcome.jsp").forward(request, response);
-        } else {
-            //error
-            request.getRequestDispatcher("/error.jsp").forward(request, response);
-        }
+            //request.getRequestDispatcher("/welcome.jsp").forward(request, response);
+//        } else {
+//            //error
+//            request.getRequestDispatcher("/error.jsp").forward(request, response);
+//        }
 
     }
 
