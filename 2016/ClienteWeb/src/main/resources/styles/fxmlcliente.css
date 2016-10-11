@@ -1,7 +1,10 @@
 /*
  * Empty Stylesheet file.
  */
-
+.botones{
+    -fx-background-color : red;
+    
+}
 
 .mainFxmlClass {
     

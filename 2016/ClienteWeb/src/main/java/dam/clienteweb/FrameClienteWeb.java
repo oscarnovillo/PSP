@@ -116,6 +116,8 @@ public class FrameClienteWeb extends javax.swing.JFrame {
         String peso = jTextFieldPeso.getText();
 
         cp.registro(nombre, peso);
+
+    
         JOptionPane.showMessageDialog(this, ConfigurationXML.getInstance().getPro().get("key")+"Registrado " + nombre + " " + peso, "Titulo", JOptionPane.INFORMATION_MESSAGE);
     }//GEN-LAST:event_jButtonRegistroActionPerformed
 

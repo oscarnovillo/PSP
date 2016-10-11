@@ -15,14 +15,17 @@ import java.util.logging.Logger;
  * @author oscar
  */
 public class ConfigurationXML {
-    
+
     private Properties pro = null;
     private static ConfigurationXML config;
-    
-    public static ConfigurationXML getInstance(){
-        
-        if(config == null)
-        {
+
+    private ConfigurationXML() {
+
+    }
+
+    public static ConfigurationXML getInstance() {
+
+        if (config == null) {
             config = new ConfigurationXML();
             config.pro = new Properties();
             try {
@@ -31,16 +34,12 @@ public class ConfigurationXML {
                 Logger.getLogger(ConfigurationXML.class.getName()).log(Level.SEVERE, null, ex);
             }
         }
-        
+
         return config;
     }
 
     public Properties getPro() {
         return pro;
     }
-            
-    private ConfigurationXML()
-    {
-        
-    }
+
 }

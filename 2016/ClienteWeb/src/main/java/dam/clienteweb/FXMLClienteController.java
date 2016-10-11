@@ -15,6 +15,7 @@ import javafx.fxml.Initializable;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
 import javafx.scene.control.TextField;
+import negocio.CalculoPeso;
 
 /**
  * FXML Controller class
@@ -35,12 +36,21 @@ public class FXMLClienteController implements Initializable {
     @FXML
     public Button btWorkout;  
     
+    CalculoPeso cp = new CalculoPeso();
     
     @FXML
     private void handleButtonRegistro(ActionEvent event)
     {
+        
+        
+        String nombre = txtNombre.getText();
+        String peso = txtPeso.getText();
+
+        cp.registro(nombre, peso);
+        
+        
         Alert alert = new Alert(Alert.AlertType.INFORMATION);
-        alert.setContentText(Configuration.getInstance().getKey()+ " "+txtNombre.getText());
+        alert.setContentText(txtNombre.getText());
         alert.show();
         
     }

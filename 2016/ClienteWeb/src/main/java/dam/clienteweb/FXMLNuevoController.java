@@ -17,6 +17,7 @@ import javafx.fxml.Initializable;
  */
 public class FXMLNuevoController implements Initializable {
 
+    
     /**
      * Initializes the controller class.
      */

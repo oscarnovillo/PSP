@@ -31,6 +31,15 @@ public class Configuration {
     
     private String favoriteFruit;
     private String key;
+    private String cosamas;
+
+    public String getCosamas() {
+        return cosamas;
+    }
+
+    public void setCosamas(String cosamas) {
+        this.cosamas = cosamas;
+    }
 
     public String getFavoriteFruit() {
         return favoriteFruit;
@@ -40,13 +49,15 @@ public class Configuration {
         this.favoriteFruit = favoriteFruit;
     }
 
+    public void setKey(String key) {
+        this.key = key;
+    }
+
     public String getKey() {
         return key;
     }
 
-    public void setKey(String key) {
-        this.key = key;
-    }
+  
 
     
     
