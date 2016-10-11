@@ -36,7 +36,7 @@ public class ClientWeb {
         
         CloseableHttpClient httpclient = HttpClients.createDefault();
         try {
-            HttpGet httpGet = new HttpGet("http://localhost:8080/ControllerPeliculas?op=ADD");
+            HttpGet httpGet = new HttpGet("http://localhost:8080/mmiprimeraWeb/Registro?nombre=pp&peso=109");
            
 
             CloseableHttpResponse response1 = httpclient.execute(httpGet);
@@ -50,6 +50,7 @@ public class ClientWeb {
             try {
                 System.out.println(response1.getStatusLine());
                 HttpEntity entity1 = response1.getEntity();
+                System.out.println(EntityUtils.toString(entity1));
                 // do something useful with the response body
                 // and ensure it is fully consumed
                 try {
