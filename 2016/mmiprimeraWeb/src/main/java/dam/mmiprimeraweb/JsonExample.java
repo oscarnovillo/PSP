@@ -5,20 +5,23 @@
  */
 package dam.mmiprimeraweb;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
 import java.io.IOException;
 import java.io.PrintWriter;
+import java.util.ArrayList;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import modelo.Ejemplo;
 
 /**
  *
  * @author oscar
  */
-@WebServlet(name = "Registro", urlPatterns = {"/Registro"})
-public class Registro extends HttpServlet {
+@WebServlet(name = "JsonExample", urlPatterns = {"/JsonExample"})
+public class JsonExample extends HttpServlet {
 
     /**
      * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
@@ -31,21 +34,31 @@ public class Registro extends HttpServlet {
      */
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        // Mirar si habia alguien
-        if (request.getSession().getAttribute("nombre") == null) {
-            //Registrar el usuario
-            request.getSession().setAttribute("nombre",
-                    request.getParameter("nombre"));
-            request.getSession().setAttribute("peso",
-                    request.getParameter("peso"));
-            
-            
-            //Bienvenida
-            request.getRequestDispatcher("/welcome.jsp").forward(request, response);
-        } else {
-            //error
-            request.getRequestDispatcher("/error.jsp").forward(request, response);
-        }
+        response.setContentType("text/html;charset=UTF-8");
+        
+        
+        ArrayList<Ejemplo> ejemplos = new ArrayList();
+        
+        Ejemplo ej = new Ejemplo();
+        ej.setNombre("kk");
+        ej.setId(1);
+        ej.setPeso("33");
+        ej.addInquietud("lll");
+        ej.addInquietud("lll222");
+        ej.addInquietud("lllasdasdasd");
+        
+        ejemplos.add(ej);
+        ejemplos.add(new Ejemplo(2,"ee","67"));
+        
+        
+        ObjectMapper mapper = new ObjectMapper();
+
+        // equivalente a las lineas de abajo. 
+        //mapper.writeValue(response.getOutputStream(), ej);
+
+        String ejemplo = mapper.writeValueAsString(ejemplos);
+        PrintWriter out = response.getWriter();
+        out.println(ejemplo);
 
     }
 
