@@ -1,4 +1,4 @@
-package dam.clienteweb;
+package dam.clienteweb.gui;
 
 /*
  * To change this license header, choose License Headers in Project Properties.
