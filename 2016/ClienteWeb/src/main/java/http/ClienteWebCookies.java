@@ -8,6 +8,7 @@ package http;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import config.Configuration;
 import java.io.IOException;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -32,10 +33,90 @@ public class ClienteWebCookies {
         CloseableHttpClient httpclient = HttpClients.createDefault();
 
         try {
-            HttpGet httpGet = new HttpGet("http://localhost:8080/ServletSession");
+            HttpGet httpGet = new HttpGet(
+                    Configuration.getInstance().getUrlBase()
+                    +"/Registro?nombre=jj&peso=80");
             HttpClientContext context = HttpClientContext.create();
             
-            CloseableHttpResponse response1 = httpclient.execute(httpGet, context);
+            CloseableHttpResponse response1 = 
+                    httpclient.execute(httpGet, context);
+            // The underlying HTTP connection is still held by the response object
+            // to allow the response content to be streamed directly from the network socket.
+            // In order to ensure correct deallocation of system resources
+            // the user MUST call CloseableHttpResponse#close() from a finally clause.
+            // Please note that if response content is not fully consumed the underlying
+            // connection cannot be safely re-used and will be shut down and discarded
+            // by the connection manager.
+            try {
+
+                HttpEntity entity1 = response1.getEntity();
+                // do something useful with the response body
+                // and ensure it is fully consumed
+
+                Header[] hs = response1.getAllHeaders();
+                for (Header h : hs) {
+                    System.out.println(h.getName() + "**** " + h.getValue());
+                }
+                System.out.println(EntityUtils.toString(entity1,"UTF-8"));
+                for (Cookie c : context.getCookieStore().getCookies())
+                {
+                    System.out.println(c.getName()+ " "+c.getValue());
+                }
+                
+
+                // Get all the cookies
+            } finally {
+                response1.close();
+            }
+            
+            httpGet = new HttpGet(
+                    Configuration.getInstance().getUrlBase()
+                    +"/Workout?workout=80");
+            
+            response1 = httpclient.execute(httpGet);
+            // The underlying HTTP connection is still held by the response object
+            // to allow the response content to be streamed directly from the network socket.
+            // In order to ensure correct deallocation of system resources
+            // the user MUST call CloseableHttpResponse#close() from a finally clause.
+            // Please note that if response content is not fully consumed the underlying
+            // connection cannot be safely re-used and will be shut down and discarded
+            // by the connection manager.
+            try {
+                
+                
+                System.out.println(response1.getStatusLine());
+                HttpEntity entity1 = response1.getEntity();
+                // do something useful with the response body
+                // and ensure it is fully consumed
+
+                Header[] hs = response1.getAllHeaders();
+                for (Header h : hs) {
+                    System.out.println(h.getName() + "**** " + h.getValue());
+                }
+                String respuesta = EntityUtils.toString(entity1,"UTF-8");
+                
+                if (respuesta.contains("ERROR"))
+                    
+                respuesta.indexOf("peso");
+                respuesta.substring(respuesta.indexOf("peso")+5,3);
+                    
+                System.out.println(EntityUtils.toString(entity1,"UTF-8"));
+                for (Cookie c : context.getCookieStore().getCookies())
+                {
+                    System.out.println(c.getName()+ " "+c.getValue());
+                }
+                
+                // Get all the cookies
+            } finally {
+                response1.close();
+            }
+
+            
+            httpGet = new HttpGet(
+                    Configuration.getInstance().getUrlBase()
+                    +"/Logout");
+            
+            response1 = httpclient.execute(httpGet);
             // The underlying HTTP connection is still held by the response object
             // to allow the response content to be streamed directly from the network socket.
             // In order to ensure correct deallocation of system resources
@@ -61,43 +142,12 @@ public class ClienteWebCookies {
                     System.out.println(c.getName()+ " "+c.getValue());
                 }
                 
-
                 // Get all the cookies
             } finally {
                 response1.close();
             }
 
-            response1 = httpclient.execute(httpGet, context);
-            // The underlying HTTP connection is still held by the response object
-            // to allow the response content to be streamed directly from the network socket.
-            // In order to ensure correct deallocation of system resources
-            // the user MUST call CloseableHttpResponse#close() from a finally clause.
-            // Please note that if response content is not fully consumed the underlying
-            // connection cannot be safely re-used and will be shut down and discarded
-            // by the connection manager.
-            try {
-                
-                
-                System.out.println(response1.getStatusLine());
-                HttpEntity entity1 = response1.getEntity();
-                // do something useful with the response body
-                // and ensure it is fully consumed
-
-                Header[] hs = response1.getAllHeaders();
-                for (Header h : hs) {
-                    System.out.println(h.getName() + "**** " + h.getValue());
-                }
-                System.out.println(EntityUtils.toString(entity1,"UTF-8"));
-                for (Cookie c : context.getCookieStore().getCookies())
-                {
-                    System.out.println(c.getName()+ " "+c.getValue());
-                }
-                
-                // Get all the cookies
-            } finally {
-                response1.close();
-            }
-
+            
             /*
             HttpPost httpPost = new HttpPost("http://httpbin.org/post");
             List <NameValuePair> nvps = new ArrayList <NameValuePair>();

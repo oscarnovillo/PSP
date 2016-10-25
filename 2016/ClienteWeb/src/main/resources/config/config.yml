@@ -1,5 +1,4 @@
 ## YAML Template.
-key : summer
-favoriteFruit : pepe
-cosamas : paco
+
+urlBase : http://localhost:8080/Peso
 

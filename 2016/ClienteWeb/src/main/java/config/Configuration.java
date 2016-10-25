@@ -1,6 +1,5 @@
 package config;
 
-
 import java.io.InputStream;
 import org.yaml.snakeyaml.Yaml;
 
@@ -9,60 +8,35 @@ import org.yaml.snakeyaml.Yaml;
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-
 /**
  *
  * @author oscar
  */
 public class Configuration {
-     
-   private static Configuration config;
-  
-    public static Configuration getInstance()
-    {
-        if (config == null)
-        {
+
+    private static Configuration config;
+
+    public static Configuration getInstance() {
+        if (config == null) {
             Yaml yaml = new Yaml();
-            config = (Configuration)yaml.loadAs(Configuration.class.getResourceAsStream("/config/config.yml"),Configuration.class);
-            
+            config = (Configuration) yaml.loadAs(
+                    Configuration.class.getResourceAsStream("/config/config.yml"), Configuration.class);
+
         }
         return config;
     }
-    
-    private String favoriteFruit;
-    private String key;
-    private String cosamas;
 
-    public String getCosamas() {
-        return cosamas;
+    private String urlBase;
+
+    public String getUrlBase() {
+        return urlBase;
     }
 
-    public void setCosamas(String cosamas) {
-        this.cosamas = cosamas;
+    public void setUrlBase(String urlBase) {
+        this.urlBase = urlBase;
     }
 
-    public String getFavoriteFruit() {
-        return favoriteFruit;
+    private Configuration() {
+
     }
-
-    public void setFavoriteFruit(String favoriteFruit) {
-        this.favoriteFruit = favoriteFruit;
-    }
-
-    public void setKey(String key) {
-        this.key = key;
-    }
-
-    public String getKey() {
-        return key;
-    }
-
-  
-
-    
-    
-  private Configuration()
-  {
-      
-  }  
 }
