@@ -32,12 +32,14 @@ public class Registro extends HttpServlet {
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         // Mirar si habia alguien
-        if (request.getSession().getAttribute("nombre") == null) {
+        
+        if (request.getSession().getAttribute("calculaPeso") == null) {
             //Registrar el usuario
-            request.getSession().setAttribute("nombre",
-                    request.getParameter("nombre"));
-            request.getSession().setAttribute("peso",
-                    request.getParameter("peso"));
+            CalculoPeso cp = new CalculoPeso();
+            cp.setNombre(request.getParameter("nombre"));
+            cp.setPeso(request.getParameter("peso"));
+            
+            request.getSession().setAttribute("calculaPeso",cp);
             
             
             //Bienvenida
