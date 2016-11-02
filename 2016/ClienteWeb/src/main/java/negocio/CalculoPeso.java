@@ -5,7 +5,16 @@
  */
 package negocio;
 
+import config.Configuration;
+import java.io.IOException;
 import java.time.LocalDateTime;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+import org.apache.http.client.methods.CloseableHttpResponse;
+import org.apache.http.client.methods.HttpGet;
+import org.apache.http.client.protocol.HttpClientContext;
+import org.apache.http.impl.client.CloseableHttpClient;
+import org.apache.http.impl.client.HttpClients;
 
 /**
  *
@@ -17,7 +26,12 @@ public class CalculoPeso {
     
     private String nombre = "";
     private String peso = "";
+    private CloseableHttpClient httpclient ;
 
+    public CalculoPeso() {
+        httpclient = HttpClients.createDefault();
+    }
+  
     public String getNombre() {
         return nombre;
     }
@@ -38,18 +52,40 @@ public class CalculoPeso {
     
     public void registro(String nombre,String peso)
     {
-        this.nombre = nombre;
-        this.peso = peso;
+        try {
+            this.nombre = nombre;
+            this.peso = peso;
+            HttpGet httpGet = new HttpGet(
+                    Configuration.getInstance().getUrlBase()
+                            +"/Registro?nombre=jj&peso=80");
+            HttpClientContext context = HttpClientContext.create();
+            
+            CloseableHttpResponse response1 = 
+                    httpclient.execute(httpGet, context);
+        } catch (IOException ex) {
+            Logger.getLogger(CalculoPeso.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        
     }
     
     public String adelgazamiento(String workout)
     {
-        ultimallamada = LocalDateTime.now();
-        
-        int iPeso = Integer.parseInt(peso);
-        iPeso -= 30 / Integer.parseInt(workout);
-        peso = iPeso + "";
-        return peso;
+       try {
+
+            HttpGet httpGet = new HttpGet(
+                    Configuration.getInstance().getUrlBase()
+                            +"/Workout?workout="+workout);
+            HttpClientContext context = HttpClientContext.create();
+            
+            CloseableHttpResponse response1 = 
+                    httpclient.execute(httpGet, context);
+            
+            //analizar el resultado
+            
+        } catch (IOException ex) {
+            Logger.getLogger(CalculoPeso.class.getName()).log(Level.SEVERE, null, ex);
+        }
+       return null;
     }
     
     public void logout()
