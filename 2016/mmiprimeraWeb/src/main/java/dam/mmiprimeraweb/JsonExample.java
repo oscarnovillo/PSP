@@ -6,6 +6,8 @@
 package dam.mmiprimeraweb;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import dao.ErrorPeso;
+import dao.PesoPersona;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.util.ArrayList;
@@ -36,30 +38,24 @@ public class JsonExample extends HttpServlet {
             throws ServletException, IOException {
         response.setContentType("text/html;charset=UTF-8");
         
+        ArrayList<PesoPersona> ejemplos = new ArrayList();
         
-        ArrayList<Ejemplo> ejemplos = new ArrayList();
+        PesoPersona ej = new PesoPersona();
         
-        Ejemplo ej = new Ejemplo();
-        ej.setNombre("kk");
-        ej.setId(1);
-        ej.setPeso("33");
-        ej.addInquietud("lll");
-        ej.addInquietud("lll222");
-        ej.addInquietud("lllasdasdasd");
-        
-        ejemplos.add(ej);
-        ejemplos.add(new Ejemplo(2,"ee","67"));
-        
+        ej.setPeso(10);
+        ErrorPeso error = new ErrorPeso("HOLA MUNDO");
+    
+        ej.setError(error);
+        ej.setLesionado(true);
         
         ObjectMapper mapper = new ObjectMapper();
-
         // equivalente a las lineas de abajo. 
-        //mapper.writeValue(response.getOutputStream(), ej);
-
-        String ejemplo = mapper.writeValueAsString(ejemplos);
-        PrintWriter out = response.getWriter();
-        out.println(ejemplo);
-
+        mapper.writeValue(response.getOutputStream(), ej);
+        
+//        String ejemplo = mapper.writeValueAsString(ejemplos);
+//        PrintWriter out = response.getWriter();
+//        out.println(ejemplo);
+    
     }
 
     // <editor-fold defaultstate="collapsed" desc="HttpServlet methods. Click on the + sign on the left to edit the code.">
