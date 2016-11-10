@@ -12,6 +12,11 @@ package dao;
 public class ErrorPeso {
     private String mensaje;
 
+    public ErrorPeso() {
+    }
+
+    
+    
     public ErrorPeso(String mensaje) {
         this.mensaje = mensaje;
     }

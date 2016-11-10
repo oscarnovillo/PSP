@@ -48,9 +48,11 @@ public class JsonExample extends HttpServlet {
         ej.setError(error);
         ej.setLesionado(true);
         
+        ejemplos.add(ej);
+        ejemplos.add(ej);
         ObjectMapper mapper = new ObjectMapper();
         // equivalente a las lineas de abajo. 
-        mapper.writeValue(response.getOutputStream(), ej);
+        mapper.writeValue(response.getOutputStream(), ejemplos);
         
 //        String ejemplo = mapper.writeValueAsString(ejemplos);
 //        PrintWriter out = response.getWriter();
