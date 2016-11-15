@@ -30,6 +30,7 @@ public class DBConnection {
             config.enforceForeignKeys(true);
             connection = DriverManager.getConnection(DB_URL, config.toProperties());
         } catch (SQLException ex) {
+            
         }
         return connection;
     }
