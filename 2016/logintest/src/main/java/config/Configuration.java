@@ -6,8 +6,12 @@
 package config;
 
 
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
 import java.io.InputStream;
 import java.util.ArrayList;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import org.yaml.snakeyaml.Yaml;
 
 /**
@@ -16,42 +20,33 @@ import org.yaml.snakeyaml.Yaml;
  */
 public class Configuration {
     
-   private static Configuration config;
-   private String pathBase;
-    
-    public static Configuration getInstance(InputStream in,String pathBase)
-    {
-        if (config == null)
-        {
-            Yaml yaml = new Yaml();
-            config = (Configuration)yaml.loadAs(in,Configuration.class);
-            config.pathBase = pathBase;
+  private static Configuration config;
+
+    public static Configuration getInstance()  {
+        if (config == null) {
+            try {
+                Yaml yaml = new Yaml();
+                config = (Configuration) yaml.loadAs(new FileInputStream("/config/config.yml"), Configuration.class);
+            } catch (FileNotFoundException ex) {
+                Logger.getLogger(Configuration.class.getName()).log(Level.SEVERE, null, ex);
+            }
+
         }
         return config;
     }
-    
-    
-    public static Configuration getInstance()
-    {
-        return config;
-    }
-    
-    private String dburl;
-  
-  private Configuration()
-  {
-      
-  }
-    
 
-    public String getDburl() {
-        return "jdbc:sqlite:"+pathBase+"\\"+dburl;
+    private String urlBase;
+
+    public String getUrlBase() {
+        return urlBase;
     }
 
-    public void setDburl(String dburl) {
-        this.dburl = dburl;
+    public void setUrlBase(String urlBase) {
+        this.urlBase = urlBase;
     }
 
-   
+    private Configuration() {
+
+    }
     
 }
