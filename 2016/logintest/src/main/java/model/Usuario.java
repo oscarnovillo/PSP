@@ -7,6 +7,8 @@ package model;
 
 import dao.*;
 import java.util.Date;
+import javafx.beans.property.SimpleStringProperty;
+import javafx.beans.property.StringProperty;
 
 /**
  *
@@ -15,7 +17,7 @@ import java.util.Date;
 public class Usuario {
     
     private int id;
-    private String user;
+    private StringProperty user;
     private String password;
     private Date fecha;
 
@@ -38,22 +40,36 @@ public class Usuario {
     
     
     public Usuario() {
+        this.user = new SimpleStringProperty();
     }
-
+      
+    
+    private final StringProperty destiny = new SimpleStringProperty();
+    public StringProperty userProperty() {
+        return destiny ;
+    }
+    public final String getUser() {
+        return userProperty().get();
+    }
+    public final void setUser(String destiny) {
+        userProperty().set(destiny);
+    }
+    
+       
     public Usuario(String user, String password, Date fecha) {
-        this.user = user;
+        this.setUser(user);
         this.password = password;
         this.fecha = fecha;
     }
 
 
-    public String getUser() {
-        return user;
-    }
-
-    public void setUser(String user) {
-        this.user = user;
-    }
+//    public String getUser() {
+//        return user;
+//    }
+//
+//    public void setUser(String user) {
+//        this.user = user;
+//    }
 
     public String getPassword() {
         return password;

@@ -5,7 +5,6 @@ package fxmlControllers;
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-
 import dao.UsuariosDAO;
 import java.net.URL;
 import java.util.Date;
@@ -16,7 +15,9 @@ import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
+import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
+import model.Person;
 import model.Usuario;
 
 /**
@@ -28,6 +29,19 @@ public class FXMLPantalla2Controller implements Initializable {
 
     @FXML
     public TableView<Usuario> FXMLTabla;
+    @FXML
+    private TableColumn<Usuario, String> firstNameColumn;
+    @FXML
+    private TableColumn<Usuario, String> lastNameColumn;
+
+    ObservableList<Usuario> ob =null;
+
+    public void setOb(ObservableList<Usuario> ob) {
+        this.ob = ob;
+        FXMLTabla.setItems(ob);
+    }
+     
+     
     
     
     /**
@@ -35,14 +49,14 @@ public class FXMLPantalla2Controller implements Initializable {
      */
     @Override
     public void initialize(URL url, ResourceBundle rb) {
-      //   TODO
-      UsuariosDAO user = new UsuariosDAO();
-      List<Usuario> lista = user.getUsers();  
-      ObservableList<Usuario> ob = FXCollections.observableArrayList(lista); 
-    
-      //Cargar Tabla
-      FXMLTabla.setItems(ob);
-     
-    }    
-    
+        //   TODO
+        
+        //Cargar Tabla
+        firstNameColumn.setCellValueFactory(cellData -> cellData.getValue().userProperty());
+        ((TableColumn<Usuario, String>)FXMLTabla.getColumns().get(0)).setCellValueFactory(cellData -> cellData.getValue().userProperty());
+        ((TableColumn<Usuario, String>)FXMLTabla.getColumns().get(2)).setCellValueFactory(cellData -> cellData.getValue().userProperty());
+        
+
+    }
+
 }

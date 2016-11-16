@@ -5,11 +5,15 @@
  */
 package fxmlControllers;
 
+import dao.UsuariosDAO;
 import java.io.IOException;
 import java.net.URL;
+import java.util.List;
 import java.util.ResourceBundle;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
@@ -19,6 +23,7 @@ import javafx.scene.control.Alert;
 import javafx.scene.control.Menu;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.BorderPane;
+import model.Usuario;
 
 /**
  * FXML Controller class
@@ -36,13 +41,22 @@ public class FXMLPrincipalController implements Initializable {
     @FXML
     public Menu FXMLMenuUsuario;
 
+    ObservableList<Usuario> ob =null;
+    List<Usuario> lista = null;
+    
     @FXML
     private void handleMenuItemLogin(ActionEvent event) {
 
         try {
+            UsuariosDAO user = new UsuariosDAO();
+         lista = user.getUsers();
+       ob = FXCollections.observableArrayList(lista);
             FXMLMenuUsuario.setVisible(true);
-            AnchorPane root = (AnchorPane)FXMLLoader.load(
-                    getClass().getResource("/fxml/FXMLPantalla2.fxml"));
+            AnchorPane root = null;
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/fxml/FXMLPantalla2.fxml"));
+            root = loader.load();
+            FXMLPantalla2Controller controller = loader.getController();
+            controller.setOb(ob);
             panelPrincipal.setCenter( root);
             
         } catch (IOException ex) {
@@ -54,15 +68,7 @@ public class FXMLPrincipalController implements Initializable {
     private void handleMenuItemRegistro(ActionEvent event) {
 
         FXMLMenuUsuario.setVisible(false);
-         try {
-            FXMLMenuUsuario.setVisible(true);
-            AnchorPane root = (AnchorPane)FXMLLoader.load(
-                    getClass().getResource("/fxml/FXMLPantalla1.fxml"));
-            panelPrincipal.setCenter( root);
-            
-        } catch (IOException ex) {
-            Logger.getLogger(FXMLPrincipalController.class.getName()).log(Level.SEVERE, null, ex);
-        }
+        lista.get(0).setUser("OTRO TIO");
     }
 
     /**
