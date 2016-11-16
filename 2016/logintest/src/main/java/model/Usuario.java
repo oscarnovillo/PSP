@@ -7,6 +7,8 @@ package model;
 
 import dao.*;
 import java.util.Date;
+import javafx.beans.property.ObjectProperty;
+import javafx.beans.property.SimpleObjectProperty;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.beans.property.StringProperty;
 
@@ -35,6 +37,7 @@ public class Usuario {
     }
 
     public void setFecha(Date fecha) {
+        dateProperty().set(fecha);
         this.fecha = fecha;
     }
     
@@ -44,7 +47,15 @@ public class Usuario {
     }
       
     
+    private final ObjectProperty date = new SimpleObjectProperty();
     private final StringProperty destiny = new SimpleStringProperty();
+    
+    public ObjectProperty dateProperty()
+    {
+        return date;
+    }
+            
+    
     public StringProperty userProperty() {
         return destiny ;
     }

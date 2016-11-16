@@ -16,9 +16,9 @@
           <TableColumn prefWidth="75.0" text="ID" />
           <TableColumn fx:id="firstNameColumn" prefWidth="75.0" text="USER" />
             <TableColumn prefWidth="75.0" text="Column X" />
-            <TableColumn prefWidth="75.0" text="Column X" />
+            <TableColumn fx:id="dateColumn" prefWidth="75.0" text="Column X" />
         </columns>
       </TableView>
-      <TextArea layoutX="23.0" layoutY="254.0" prefHeight="132.0" prefWidth="565.0" />
+      <TextArea fx:id="txtArea" layoutX="23.0" layoutY="254.0" prefHeight="132.0" prefWidth="565.0" />
    </children>
 </AnchorPane>
