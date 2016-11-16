@@ -19,6 +19,7 @@ public class Usuario {
     private String password;
     private Date fecha;
 
+    
     public int getId() {
         return id;
     }
