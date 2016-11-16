@@ -19,9 +19,11 @@ import org.sqlite.SQLiteConfig;
  */
 public class DBConnection {
 
-    public static final String DB_URL = Configuration.getInstance().getDburl();
+    public static final String DB_URL = "";
     public static final String DRIVER = "org.sqlite.JDBC";
 
+    
+    
     public Connection getConnection() throws ClassNotFoundException {
         //Class.forName(DRIVER);
         Connection connection = null;
@@ -45,11 +47,13 @@ public class DBConnection {
         return connection;
     }
     
-    public Connection getConnectionMysql(String conn,String user, String pass) throws ClassNotFoundException {
-        Class.forName("com.mysql.jdbc.Driver");
+    public Connection getConnectionMysql() throws ClassNotFoundException {
+        
         Connection connection = null;
         try {
-            connection = DriverManager.getConnection(conn,user,pass);
+            connection = DriverManager.getConnection(
+                    "jdbc:mysql://sql8.freemysqlhosting.net:3306/sql8144411"
+                    ,"sql8144411","ZEZRvssuFH");
         } catch (SQLException ex) {
         }
         return connection;
