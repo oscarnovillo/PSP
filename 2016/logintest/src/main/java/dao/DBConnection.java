@@ -11,7 +11,7 @@ import java.sql.DriverManager;
 import java.sql.SQLException;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-import org.sqlite.SQLiteConfig;
+
 
 /**
  *
@@ -22,20 +22,7 @@ public class DBConnection {
     public static final String DB_URL = "";
     public static final String DRIVER = "org.sqlite.JDBC";
 
-    
-    
-    public Connection getConnection() throws ClassNotFoundException {
-        //Class.forName(DRIVER);
-        Connection connection = null;
-        try {
-            SQLiteConfig config = new SQLiteConfig();
-            config.enforceForeignKeys(true);
-            connection = DriverManager.getConnection(DB_URL, config.toProperties());
-        } catch (SQLException ex) {
-            
-        }
-        return connection;
-    }
+
     
     public Connection getConnection(String conn) throws ClassNotFoundException {
         Class.forName("com.microsoft.sqlserver.jdbc.SQLServerDriver");
