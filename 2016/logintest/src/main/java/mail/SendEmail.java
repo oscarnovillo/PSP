@@ -27,8 +27,9 @@ public class SendEmail {
             email.setSSLOnConnect(true);
             email.setFrom("alumno1@iesquevedo.es");
             email.setSubject("TestMail");
-            email.setMsg(utils.Utils.randomAlphaNumeric(80));
+            email.setMsg("http://elservidor?confirmacion="+utils.Utils.randomAlphaNumeric(80));
             email.addTo("oscar.novillo@gmail.com");
+           
             email.send();
             System.out.println("OK");
         } catch (EmailException ex) {
