@@ -5,13 +5,14 @@
  */
 package dao;
 
+import dam.model.Usuario;
 import java.math.BigInteger;
 import java.sql.Connection;
 import java.sql.SQLException;
 import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-import model.Usuario;
+
 import org.apache.commons.dbutils.QueryRunner;
 import org.apache.commons.dbutils.ResultSetHandler;
 import org.apache.commons.dbutils.handlers.BeanHandler;
@@ -24,20 +25,18 @@ import org.apache.commons.dbutils.handlers.ScalarHandler;
  */
 public class UsuariosDAO {
 
-    public List<Usuario> getUsers() {
+    public List<Usuario> getUsers()  {
         List<Usuario> lista = null;
         DBConnection db = new DBConnection();
         Connection con  = null;
         try {
-            con = db.getConnectionMysql();
+            con = db.getConnection();
             QueryRunner qr =  new QueryRunner();
             ResultSetHandler<List<Usuario>> h = 
                     new BeanListHandler<Usuario>(Usuario.class);
             lista = qr.query(con, "select * FROM LOGIN", h);
             
-        } catch (ClassNotFoundException ex) {
-            Logger.getLogger(UsuariosDAO.class.getName()).log(Level.SEVERE, null, ex);
-        } catch (SQLException ex) {
+        } catch (Exception ex) {
             Logger.getLogger(UsuariosDAO.class.getName()).log(Level.SEVERE, null, ex);
         }
         finally
@@ -51,16 +50,14 @@ public class UsuariosDAO {
         DBConnection db = new DBConnection();
         Connection con  = null;
         try {
-            con = db.getConnectionMysql();
+            con = db.getConnection();
             QueryRunner qr =  new QueryRunner();
              
             int filas = qr.update(con, 
                     "UPDATE LOGIN SET USER=? , FECHA=? WHERE id=?",
                     u.getUser(),u.getFecha(),u.getId());
             
-        } catch (ClassNotFoundException ex) {
-            Logger.getLogger(UsuariosDAO.class.getName()).log(Level.SEVERE, null, ex);
-        } catch (SQLException ex) {
+        } catch (Exception ex) {
             Logger.getLogger(UsuariosDAO.class.getName()).log(Level.SEVERE, null, ex);
         }
         finally
@@ -77,7 +74,7 @@ public class UsuariosDAO {
         Connection con  = null;
         
         try {
-            con = db.getConnectionMysql();
+            con = db.getConnection();
             con.setAutoCommit(false);
             QueryRunner qr =  new QueryRunner();
              
@@ -89,14 +86,11 @@ public class UsuariosDAO {
             u.setId(id);
             con.commit();
             
-        } catch (ClassNotFoundException ex) {
-            Logger.getLogger(UsuariosDAO.class.getName()).log(Level.SEVERE, null, ex);
-        } catch (SQLException ex) {
+        } catch (Exception ex) {
             Logger.getLogger(UsuariosDAO.class.getName()).log(Level.SEVERE, null, ex);
         }
         finally
         {
-            
             db.cerrarConexion(con);
         }
         return u;

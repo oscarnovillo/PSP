@@ -3,15 +3,19 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package dam.servidorlogin;
+package dam.servlets;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
+import dam.model.Usuario;
 import java.io.IOException;
 import java.io.PrintWriter;
+import java.util.List;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import servicios.ServiciosUsuarios;
 
 /**
  *
@@ -31,6 +35,17 @@ public class Usuarios extends HttpServlet {
      */
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
+        String op = request.getParameter("op");
+        switch (op) {
+            case "GET":
+                ServiciosUsuarios su = new ServiciosUsuarios();
+                List<Usuario> usuarios = su.getUsers();
+                ObjectMapper mapper = new ObjectMapper();
+                // equivalente a las lineas de abajo. 
+                mapper.writeValue(response.getOutputStream(), usuarios);
+                break;
+
+        }
 
     }
 

@@ -6,6 +6,7 @@
 package servicios;
 
 import dam.model.Usuario;
+import dao.UsuariosDAO;
 import java.util.List;
 
 /**
@@ -13,11 +14,12 @@ import java.util.List;
  * @author oscar
  */
 public class ServiciosUsuarios {
-    
-    
-    public List<Usuario> getUsers()
-    {
-        
+
+    public List<Usuario> getUsers() {
+        List<Usuario> lista = null;
+        UsuariosDAO user = new UsuariosDAO();
+        lista = user.getUsers();
+        return lista;
     }
-    
+
 }
