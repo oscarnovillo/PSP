@@ -8,6 +8,7 @@ package fxmlControllers;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import dam.model.Usuario;
 import dao.UsuariosDAO;
 import java.io.IOException;
 import java.net.URL;
@@ -24,8 +25,7 @@ import javafx.fxml.Initializable;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import javafx.scene.control.TextArea;
-import model.Person;
-import model.Usuario;
+
 
 /**
  * FXML Controller class
@@ -74,11 +74,7 @@ public class FXMLPantalla2Controller implements Initializable {
     public void initialize(URL url, ResourceBundle rb) {
         //   TODO
         
-        //Cargar Tabla
-        firstNameColumn.setCellValueFactory(cellData -> cellData.getValue().userProperty());
-        ((TableColumn<Usuario, String>)FXMLTabla.getColumns().get(0)).setCellValueFactory(cellData -> cellData.getValue().userProperty());
-        ((TableColumn<Usuario, String>)FXMLTabla.getColumns().get(2)).setCellValueFactory(cellData -> cellData.getValue().userProperty());
-        dateColumn.setCellValueFactory(cellData -> cellData.getValue().dateProperty());
+
 
     }
 

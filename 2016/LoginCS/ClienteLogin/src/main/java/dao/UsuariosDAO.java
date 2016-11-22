@@ -5,18 +5,25 @@
  */
 package dao;
 
+import com.fasterxml.jackson.core.type.TypeReference;
+import com.fasterxml.jackson.databind.DeserializationFeature;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import dam.model.Usuario;
+import java.io.IOException;
 import java.math.BigInteger;
 import java.sql.Connection;
 import java.sql.SQLException;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-import model.Usuario;
-import org.apache.commons.dbutils.QueryRunner;
-import org.apache.commons.dbutils.ResultSetHandler;
-import org.apache.commons.dbutils.handlers.BeanHandler;
-import org.apache.commons.dbutils.handlers.BeanListHandler;
-import org.apache.commons.dbutils.handlers.ScalarHandler;
+import javax.security.auth.login.Configuration;
+import org.apache.http.HttpEntity;
+import org.apache.http.client.methods.CloseableHttpResponse;
+import org.apache.http.client.methods.HttpGet;
+import org.apache.http.client.protocol.HttpClientContext;
+import org.apache.http.impl.client.CloseableHttpClient;
+import org.apache.http.impl.client.HttpClients;
 
 /**
  *
@@ -26,82 +33,34 @@ public class UsuariosDAO {
 
     public List<Usuario> getUsers() {
         List<Usuario> lista = null;
-        DBConnection db = new DBConnection();
-        Connection con  = null;
+
         try {
-            con = db.getConnectionMysql();
-            QueryRunner qr =  new QueryRunner();
-            ResultSetHandler<List<Usuario>> h = 
-                    new BeanListHandler<Usuario>(Usuario.class);
-            lista = qr.query(con, "select * FROM LOGIN", h);
-            
-        } catch (ClassNotFoundException ex) {
-            Logger.getLogger(UsuariosDAO.class.getName()).log(Level.SEVERE, null, ex);
-        } catch (SQLException ex) {
+
+            String msg = "";
+            try {
+                CloseableHttpClient httpclient;
+
+                httpclient = HttpClients.createDefault();
+                HttpGet httpGet = new HttpGet(
+                        "http://localhost:8080/servidorLogin/Usuarios?op=GET");
+                //Ejecutamos y se mete dentro del response la respuesta
+                CloseableHttpResponse response = httpclient.execute(httpGet);
+                // Cogemos la entidad getContent y se parsea el objeto con el mapper
+                HttpEntity entity1 = response.getEntity();
+                ObjectMapper mapper = new ObjectMapper();
+                mapper.configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);
+                lista = mapper.readValue(entity1.getContent(), new TypeReference<List<Usuario>>() {
+                });
+
+            } catch (IOException ex) {
+                System.out.println(ex.getMessage());
+            }
+
+        } catch (Exception ex) {
             Logger.getLogger(UsuariosDAO.class.getName()).log(Level.SEVERE, null, ex);
         }
-        finally
-        {
-            db.cerrarConexion(con);
-        }
+
         return lista;
     }
-
-    public void updateUser(Usuario u) {
-        DBConnection db = new DBConnection();
-        Connection con  = null;
-        try {
-            con = db.getConnectionMysql();
-            QueryRunner qr =  new QueryRunner();
-             
-            int filas = qr.update(con, 
-                    "UPDATE LOGIN SET USER=? , FECHA=? WHERE id=?",
-                    u.getUser(),u.getFecha(),u.getId());
-            
-        } catch (ClassNotFoundException ex) {
-            Logger.getLogger(UsuariosDAO.class.getName()).log(Level.SEVERE, null, ex);
-        } catch (SQLException ex) {
-            Logger.getLogger(UsuariosDAO.class.getName()).log(Level.SEVERE, null, ex);
-        }
-        finally
-        {
-            db.cerrarConexion(con);
-        }
-        
-
-    }
-    
-    
-    public Usuario addUser(Usuario u) {
-        DBConnection db = new DBConnection();
-        Connection con  = null;
-        
-        try {
-            con = db.getConnectionMysql();
-            con.setAutoCommit(false);
-            QueryRunner qr =  new QueryRunner();
-             
-            int id = qr.insert(con, 
-                    "INSERT INTO LOGIN (USER,PASSWORD,FECHA) VALUES(?,?,?)",
-                     new ScalarHandler<BigInteger>(),
-                     u.getUser(),u.getPassword(), u.getFecha()).intValue();
-            
-            u.setId(id);
-            con.commit();
-            
-        } catch (ClassNotFoundException ex) {
-            Logger.getLogger(UsuariosDAO.class.getName()).log(Level.SEVERE, null, ex);
-        } catch (SQLException ex) {
-            Logger.getLogger(UsuariosDAO.class.getName()).log(Level.SEVERE, null, ex);
-        }
-        finally
-        {
-            
-            db.cerrarConexion(con);
-        }
-        return u;
-
-    }
-    
 
 }

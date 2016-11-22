@@ -5,6 +5,7 @@
  */
 package fxmlControllers;
 
+import dam.model.Usuario;
 import dao.UsuariosDAO;
 import java.io.IOException;
 import java.net.URL;
@@ -23,7 +24,7 @@ import javafx.scene.control.Alert;
 import javafx.scene.control.Menu;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.BorderPane;
-import model.Usuario;
+
 
 /**
  * FXML Controller class

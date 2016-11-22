@@ -5,10 +5,11 @@
  */
 package com.login;
 
+import dam.model.Usuario;
 import dao.UsuariosDAO;
 import java.util.Date;
 import java.util.List;
-import model.Usuario;
+
 
 /**
  *
@@ -26,13 +27,6 @@ public class Main {
         {
             System.out.println(u); 
         }
-        //lista.get(0).setUser("pedro Nuevo");
-        lista.get(0).setFecha(new Date());
-        user.updateUser(lista.get(0));
-        //Usuario nuevo = new Usuario("user nuevo","pass",new Date());
-        //user.addUser(nuevo);
-        //System.out.println(nuevo);
-       
         
     }
     
