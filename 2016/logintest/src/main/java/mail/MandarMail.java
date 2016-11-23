@@ -31,7 +31,6 @@ public class MandarMail {
 	}
  
 	public static void generateAndSendEmail() throws AddressException, MessagingException {
- 
 		// Step1
 		System.out.println("\n 1st ===> setup Mail Server Properties..");
 		mailServerProperties = System.getProperties();
