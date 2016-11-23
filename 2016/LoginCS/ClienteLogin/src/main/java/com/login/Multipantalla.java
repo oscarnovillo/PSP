@@ -22,7 +22,7 @@ import javafx.stage.Stage;
  */
 public class Multipantalla extends Application {
     
-   @Override
+    @Override
     public void start(Stage stage) throws Exception{
         Parent root = FXMLLoader.load(
                 getClass().getResource("/fxml/FXMLPrincipal.fxml"));

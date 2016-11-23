@@ -9,7 +9,7 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import dam.model.Usuario;
-import dao.UsuariosDAO;
+import dao.ProxyUsuariosDAO;
 import java.io.IOException;
 import java.net.URL;
 import java.util.Date;

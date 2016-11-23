@@ -6,7 +6,7 @@
 package fxmlControllers;
 
 import dam.model.Usuario;
-import dao.UsuariosDAO;
+import dao.ProxyUsuariosDAO;
 import java.io.IOException;
 import java.net.URL;
 import java.util.List;
@@ -49,9 +49,9 @@ public class FXMLPrincipalController implements Initializable {
     private void handleMenuItemLogin(ActionEvent event) {
 
         try {
-            UsuariosDAO user = new UsuariosDAO();
-         lista = user.getUsers();
-       ob = FXCollections.observableArrayList(lista);
+            ProxyUsuariosDAO user = new ProxyUsuariosDAO();
+            lista = user.getUsers();
+            ob = FXCollections.observableArrayList(lista);
             FXMLMenuUsuario.setVisible(true);
             AnchorPane root = null;
             FXMLLoader loader = new FXMLLoader(getClass().getResource("/fxml/FXMLPantalla2.fxml"));

@@ -6,7 +6,7 @@
 package com.login;
 
 import dam.model.Usuario;
-import dao.UsuariosDAO;
+import dao.ProxyUsuariosDAO;
 import java.util.Date;
 import java.util.List;
 
@@ -20,7 +20,7 @@ public class Main {
     public static void main(String[] args) {
         
         //conexion con BD y meter usuario.
-        UsuariosDAO user = new UsuariosDAO();
+        ProxyUsuariosDAO user = new ProxyUsuariosDAO();
         List<Usuario> lista = user.getUsers();
         
         for (Usuario u : lista)
