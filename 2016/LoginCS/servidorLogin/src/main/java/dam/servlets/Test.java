@@ -5,8 +5,10 @@
  */
 package dam.servlets;
 
+import config.Configuration;
 import java.io.IOException;
 import java.io.PrintWriter;
+import java.util.Map.Entry;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
@@ -40,7 +42,17 @@ public class Test extends HttpServlet {
             out.println("<title>Servlet Test</title>");            
             out.println("</head>");
             out.println("<body>");
-            out.println("<h1>Servlet Test at " + request.getContextPath() + "</h1>");
+            out.println("<h1>Servlet Test at " + Configuration.getInstance().getUrlBase() + "</h1>");
+            for (String s : Configuration.getInstance().getLista())
+            {
+                out.println(s);
+            }
+            for (Entry<String,String> s : Configuration.getInstance().getMap().entrySet())
+            {
+                out.println(s.getKey()+ " "+s.getValue());
+            }
+
+
             out.println("</body>");
             out.println("</html>");
         }

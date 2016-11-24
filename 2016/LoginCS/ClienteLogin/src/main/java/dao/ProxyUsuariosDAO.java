@@ -71,11 +71,12 @@ public class ProxyUsuariosDAO {
         return lista;
     }
 
-    public void addUser(Usuario usuario) {
+    public String addUser(Usuario usuario) {
+        String respuesta =null;
         try {
             CloseableHttpClient httpclient;
             httpclient = HttpClients.createDefault();
-            HttpPost httpPost = new HttpPost("http://localhost:8080/usuarios");
+            HttpPost httpPost = new HttpPost("http://localhost:8080/servidorLogin/Usuarios");
             List<NameValuePair> nvps = new ArrayList<NameValuePair>();
             ObjectMapper mapper = new ObjectMapper();
             String usuarioJson = mapper.writeValueAsString(usuario);
@@ -83,11 +84,12 @@ public class ProxyUsuariosDAO {
             nvps.add(new BasicNameValuePair("op", "ADD"));
             httpPost.setEntity(new UrlEncodedFormEntity(nvps));
             CloseableHttpResponse response2 = httpclient.execute(httpPost);
-             HttpEntity entity2 = response2.getEntity();
+            HttpEntity entity2 = response2.getEntity();
                 // do something useful with the response body
                 // and ensure it is fully consumed
-            String respuesta =EntityUtils.toString(entity2,"UTF-8") ;
-            System.out.println(respuesta);
+            
+            respuesta = EntityUtils.toString(entity2,"UTF-8");
+            
 
         } catch (JsonProcessingException ex) {
             Logger.getLogger(ProxyUsuariosDAO.class.getName()).log(Level.SEVERE, null, ex);
@@ -96,6 +98,8 @@ public class ProxyUsuariosDAO {
         } catch (IOException ex) {
             Logger.getLogger(ProxyUsuariosDAO.class.getName()).log(Level.SEVERE, null, ex);
         }
+        return respuesta;
     }
+    
 
 }

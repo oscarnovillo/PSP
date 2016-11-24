@@ -1,0 +1,10 @@
+## YAML Template.
+---
+urlBase: pruebaWEB-INF
+lista:
+    - dos
+    - tres
+map:
+    clave1: valor1
+    clave2: valor2
+    
