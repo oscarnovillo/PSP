@@ -36,7 +36,7 @@ public class Main {
             Usuario usu = new Usuario();
             usu.setUser("PROBANDO JSON");
             String hash = user.addUser(usu);
-           
+            System.out.println(hash);
             boolean ok = PasswordHash.validatePassword(usu.getUser(), hash);
             System.out.println(ok);
         } catch (NoSuchAlgorithmException ex) {
