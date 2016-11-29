@@ -27,7 +27,7 @@ public class Configuration {
     public static Configuration getInstance()  {
         if (config == null) {
             Yaml yaml = new Yaml();
-            config = (Configuration) yaml.loadAs(Configuration.class.getResourceAsStream("/config/config.yml"), Configuration.class);
+            config = (Configuration) yaml.loadAs(Configuration.class.getResourceAsStream("config.yml"), Configuration.class);
 
         }
         return config;
