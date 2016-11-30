@@ -19,7 +19,7 @@ import java.util.logging.Logger;
 public class DBConnection {
 
     public static final String DB_URL = "";
-    public static final String DRIVER = "org.sqlite.JDBC";
+    public static final String DRIVER = "com.mysql.jdbc.Driver";
     
     public DBConnection()
     {
