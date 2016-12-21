@@ -1,3 +1,5 @@
+package listener;
+
 
 import config.Configuration;
 import javax.servlet.ServletContextEvent;
@@ -14,7 +16,7 @@ import javax.servlet.ServletContextListener;
  *
  * @author oscar
  */
-public class NewServletListener implements ServletContextListener {
+public class ConfigListener implements ServletContextListener {
 
     @Override
     public void contextInitialized(ServletContextEvent sce) {
