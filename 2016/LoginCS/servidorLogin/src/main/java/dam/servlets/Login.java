@@ -5,31 +5,20 @@
  */
 package dam.servlets;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
-import dam.model.Nuevo;
-import dam.model.Usuario;
-import dao.AutoIncrement;
 import java.io.IOException;
 import java.io.PrintWriter;
-import java.time.LocalDate;
-import java.time.Month;
-import java.time.ZoneId;
-import java.util.Calendar;
-import java.util.Date;
-import java.util.List;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import servicios.ServiciosUsuarios;
 
 /**
  *
  * @author oscar
  */
-@WebServlet(name = "AI", urlPatterns = {"/AI"})
-public class AI extends HttpServlet {
+@WebServlet(name = "Login", urlPatterns = {"/Login"})
+public class Login extends HttpServlet {
 
     /**
      * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
@@ -42,18 +31,20 @@ public class AI extends HttpServlet {
      */
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-
-        
-        AutoIncrement ai = new AutoIncrement();
-        LocalDate tenthFeb2014 = LocalDate.of(2014, Month.FEBRUARY, 10);
-        
-        Nuevo n = new Nuevo("PRUEBA",
-                Date.from(tenthFeb2014.atStartOfDay(ZoneId.systemDefault()).toInstant()));
-        n = ai.addNuevo(n);
-
-        // equivalente a las lineas de abajo.
-       request.setAttribute("json", n);
-        
+        response.setContentType("text/html;charset=UTF-8");
+        try (PrintWriter out = response.getWriter()) {
+            /* TODO output your page here. You may use following sample code. */
+            out.println("<!DOCTYPE html>");
+            out.println("<html>");
+            out.println("<head>");
+            out.println("<title>Servlet Login</title>");            
+            out.println("</head>");
+            out.println("<body>");
+            out.println("<h1>LOGIN</h1>");
+            out.println("</body>");
+            out.println("</html>");
+            request.getSession().setAttribute("LOGIN", "LOGIN");
+        }
     }
 
     // <editor-fold defaultstate="collapsed" desc="HttpServlet methods. Click on the + sign on the left to edit the code.">

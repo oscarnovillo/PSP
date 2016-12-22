@@ -5,11 +5,8 @@
  */
 package dam.servlets;
 
-import com.fasterxml.jackson.core.type.TypeReference;
-import com.fasterxml.jackson.databind.ObjectMapper;
 import dam.model.Usuario;
 import java.io.IOException;
-import java.io.PrintWriter;
 import java.security.NoSuchAlgorithmException;
 import java.security.spec.InvalidKeySpecException;
 import java.util.List;
@@ -42,22 +39,18 @@ public class Usuarios extends HttpServlet {
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         try {
-            ObjectMapper mapper = new ObjectMapper();
+            
             String op = request.getParameter("op");
             switch (op) {
                 case "GET":
                     ServiciosUsuarios su = new ServiciosUsuarios();
                     List<Usuario> usuarios = su.getUsers();
-                    
                     // equivalente a las lineas de abajo.
-                    mapper.writeValue(response.getOutputStream(), usuarios);
+                    request.setAttribute("json",usuarios);
                     break;
                 case "ADD":
-                    String usuario = request.getParameter("user");
-                    Usuario u = mapper.readValue(usuario, new TypeReference<Usuario>() {});
-                    response.getWriter().print(PasswordHash.createHash(u.getUser()));
-                    
-                    
+                    Usuario u = (Usuario)request.getAttribute("user");
+                    request.setAttribute("json", PasswordHash.createHash(u.getUser()));
                     break;
                     
             }
