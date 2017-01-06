@@ -6,6 +6,7 @@
 package com.clienteweb;
 
 import static com.clienteweb.EjemploRSA.mostrarBytes;
+import java.io.DataInputStream;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.IOException;
@@ -37,7 +38,7 @@ public class CifrarRSAFicheros {
  
     public static void main(String[] args) throws FileNotFoundException {
         
-        String nombre = "test";
+        String nombre = "server1024";
         try {
             // Anadir provider JCE (provider por defecto no soporta RSA)
       Security.addProvider(new BouncyCastleProvider());  // Cargar el provider BC
@@ -57,9 +58,11 @@ public class CifrarRSAFicheros {
 		KeyFactory keyFactoryRSA = KeyFactory.getInstance("RSA", "BC"); // Hace uso del provider BC
             /*** 4 Recuperar clave PUBLICA del fichero */
 		// 4.1 Leer datos binarios x809
-		byte[] bufferPub = new byte[5000];
+		byte[] bufferPub = new byte[162];
 		FileInputStream in = new FileInputStream(nombre+".publica");
-		in.read(bufferPub, 0, 5000);
+                DataInputStream d =  new DataInputStream(in);
+                d.readFully(bufferPub,0,162);
+		//in.read(bufferPub, 0, 5000);
 		in.close();
 
 		// 4.2 Recuperar clave publica desde datos codificados en formato X509
@@ -91,15 +94,22 @@ public class CifrarRSAFicheros {
             /*** 2 Recuperar clave Privada del fichero */
 		// 2.1 Leer datos binarios PKCS8
 		byte[] bufferPriv = new byte[5000];
-		 in = new FileInputStream(nombre+".privada");
-		in.read(bufferPriv, 0, 5000);
+		in = new FileInputStream(nombre + ".privada");
+		          int chars = in.read(bufferPriv, 0, 5000);
 		in.close();
+                
+                byte[] bufferPriv2 = new byte[chars];
+                System.arraycopy(bufferPriv, 0, bufferPriv2, 0, chars);
+
+		// 2.2 Recuperar clave privada desde datos codificados en formato PKCS8
+		PKCS8EncodedKeySpec clavePrivadaSpec = new PKCS8EncodedKeySpec(bufferPriv2);
+                
+		PrivateKey clavePrivada2 = keyFactoryRSA.generatePrivate(clavePrivadaSpec);
+                
+                
 
                 
-		// 2.2 Recuperar clave privada desde datos codificados en formato PKCS8
-		PKCS8EncodedKeySpec clavePrivadaSpec = new PKCS8EncodedKeySpec(bufferPriv);
-		PrivateKey clavePrivada2 = keyFactoryRSA.generatePrivate(clavePrivadaSpec);
-            
+		
             cifrador.init(Cipher.DECRYPT_MODE, clavePrivada2); // Descrifra con la clave privada
             
             System.out.println("3b. Descifrar con clave privada");
