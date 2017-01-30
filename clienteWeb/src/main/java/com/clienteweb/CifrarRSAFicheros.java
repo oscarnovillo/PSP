@@ -20,6 +20,7 @@ import java.security.Security;
 import java.security.spec.InvalidKeySpecException;
 import java.security.spec.PKCS8EncodedKeySpec;
 import java.security.spec.X509EncodedKeySpec;
+import java.util.Arrays;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.crypto.BadPaddingException;
@@ -74,13 +75,20 @@ public class CifrarRSAFicheros {
             
             System.out.println("3a. Cifrar con clave publica");
             
-            String sinCifrar = "12345678901234567890123456789012345678901234567890123";
-            sinCifrar = "12asdad  ";
+            String sinCifrar = "12345678901234567890123456789012345678901234567890123456789esto no puede ser";
+            sinCifrar += "kokokokokokoiojghjflkghjflkgjhkfsssssssssh";//sinCifrar = "12asdad  ";
             System.out.println(sinCifrar.getBytes("UTF-8").length);
-            byte[] partes = new byte[53];
+            byte[] partes = new byte[100];
             
             
-            byte[] bufferCifrado = cifrador.doFinal(sinCifrar.getBytes("UTF-8"));
+            byte[] bufferCifrado = new byte[5000];
+            byte[] buffer = sinCifrar.getBytes("UTF-8");
+            
+            for (int i =0;i<buffer.length;i+=100)
+            {
+                partes = Arrays.copyOfRange(buffer, i, i+100);
+                cifrador.doFinal(partes);
+            }
             
             System.out.println("TEXTO CIFRADO"+bufferCifrado.length);
             mostrarBytes(bufferCifrado);
