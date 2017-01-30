@@ -22,7 +22,8 @@ import javax.servlet.http.HttpServletRequest;
  *
  * @author oscar
  */
-@WebFilter(filterName = "FiltroLogin", urlPatterns = {"/Usuarios", "/AI","/cucarachas"})
+@WebFilter(filterName = "FiltroLogin",
+        urlPatterns = {"/Usuarios", "/AI","/cucarachas"})
 public class FiltroLogin implements Filter {
 
     private static final boolean debug = true;
