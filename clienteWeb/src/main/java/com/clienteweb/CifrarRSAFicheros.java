@@ -5,7 +5,7 @@
  */
 package com.clienteweb;
 
-import static com.clienteweb.EjemploRSA.mostrarBytes;
+
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.IOException;
@@ -37,12 +37,12 @@ public class CifrarRSAFicheros {
  
     public static void main(String[] args) throws FileNotFoundException {
         
-        String nombre = "test";
+        String nombre = "server1024";
         try {
             // Anadir provider JCE (provider por defecto no soporta RSA)
-      Security.addProvider(new BouncyCastleProvider());  // Cargar el provider BC
-       Security.addProvider(new org.bouncycastle.jce.provider.BouncyCastleProvider());
-    Cipher cifrador = Cipher.getInstance("RSA/ECB/PKCS1Padding", "BC");
+            Security.addProvider(new BouncyCastleProvider());  // Cargar el provider BC
+            Security.addProvider(new org.bouncycastle.jce.provider.BouncyCastleProvider());
+            Cipher cifrador = Cipher.getInstance("RSA/ECB/PKCS1Padding", "BC");
             // PASO 2: Crear cifrador RSA
           //  Cipher cifrador =Cipher.getInstance("RSA/ECB/PKCS1Padding", "BC"); // Hace uso del provider BC
             /************************************************************************
@@ -57,9 +57,9 @@ public class CifrarRSAFicheros {
 		KeyFactory keyFactoryRSA = KeyFactory.getInstance("RSA", "BC"); // Hace uso del provider BC
             /*** 4 Recuperar clave PUBLICA del fichero */
 		// 4.1 Leer datos binarios x809
-		byte[] bufferPub = new byte[5000];
+		byte[] bufferPub = new byte[162];
 		FileInputStream in = new FileInputStream(nombre+".publica");
-		in.read(bufferPub, 0, 5000);
+		in.read(bufferPub, 0, 162);
 		in.close();
 
 		// 4.2 Recuperar clave publica desde datos codificados en formato X509
@@ -74,7 +74,7 @@ public class CifrarRSAFicheros {
             String sinCifrar = "12345678901234567890123456789012345678901234567890123";
             sinCifrar = "12asdad  ";
             System.out.println(sinCifrar.getBytes("UTF-8").length);
-            byte[] partes = new byte[53];
+            //byte[] partes = new byte[53];
             
             
             byte[] bufferCifrado = cifrador.doFinal(sinCifrar.getBytes("UTF-8"));
@@ -128,4 +128,8 @@ public class CifrarRSAFicheros {
             Logger.getLogger(CifrarRSAFicheros.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
+    
+    public static void mostrarBytes(byte [] buffer) {
+		System.out.write(buffer, 0, buffer.length);
+   } 
 }
