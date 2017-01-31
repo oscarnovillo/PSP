@@ -35,6 +35,7 @@ import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 import java.security.Security;
 import java.security.spec.InvalidKeySpecException;
+import java.security.spec.KeySpec;
 import javax.crypto.spec.SecretKeySpec;
 import javax.crypto.Cipher;
 import javax.crypto.SecretKey;
@@ -203,20 +204,32 @@ public class PasswordHash {
         return sinCifrar;
     }
 
+    private static SecretKey secret = null;
+
     private static Cipher obtieneCipher(boolean paraCifrar) throws Exception {
         final String frase = "FraseLargaConDiferentesLetrasNumerosYCaracteresEspeciales_áÁéÉíÍóÓúÚüÜñÑ1234567890!#%$&()=%_NO_USAR_ESTA_FRASE!_";
-        final MessageDigest digest = 
-                MessageDigest.getInstance("SHA-1");
+        final MessageDigest digest
+                = MessageDigest.getInstance("SHA-512");
         digest.update(frase.getBytes("UTF-8"));
         final SecretKeySpec key = new SecretKeySpec(
                 digest.digest(), 0, 16, "AES");
 
+        SecretKeyFactory factory = SecretKeyFactory.getInstance("PBKDF2WithHmacSHA256");
+        if (secret == null) {
+            SecureRandom random = new SecureRandom();
+            byte[] salt = new byte[SALT_BYTE_SIZE];
+            random.nextBytes(salt);
+            KeySpec spec = new PBEKeySpec("contrase".toCharArray(), salt, 65536, 256);
+            SecretKey tmp = factory.generateSecret(spec);
+            secret = new SecretKeySpec(tmp.getEncoded(), 0, 16, "AES");
+        }
+
         final Cipher aes = Cipher.getInstance(
                 "AES/ECB/PKCS5Padding");
         if (paraCifrar) {
-            aes.init(Cipher.ENCRYPT_MODE, key);
+            aes.init(Cipher.ENCRYPT_MODE, secret);
         } else {
-            aes.init(Cipher.DECRYPT_MODE, key);
+            aes.init(Cipher.DECRYPT_MODE, secret);
         }
 
         return aes;
@@ -238,12 +251,12 @@ public class PasswordHash {
             // Test password validation
             boolean failure = false;
             byte[] cifrado = cifra("Hola");
-            
+
             String hex = toHex(cifrado);
-            
-            System.out.println(cifrado.length+ " "+new String(encodeBase64(cifrado))+" "+hex);
+
+            System.out.println(cifrado.length + " " + new String(encodeBase64(cifrado)) + " " + hex);
             System.out.println(descifra(fromHex(hex)));
-            
+
             //System.out.println(Security.getProviders()[0].getName());
             System.out.println("Running tests...");
             for (int i = 0; i < 100; i++) {

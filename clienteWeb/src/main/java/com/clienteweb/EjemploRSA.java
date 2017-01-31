@@ -78,7 +78,7 @@ public class EjemploRSA  {
       bufferPlano2 = cifrador.doFinal(bufferCifrado);
       System.out.println("TEXTO DESCIFRADO");
       mostrarBytes(bufferPlano2);
-      System.out.println("\n-------------------------------");
+      System.out.println("\n--------1234567890-----------------------");
    } // Fin main
    
    
