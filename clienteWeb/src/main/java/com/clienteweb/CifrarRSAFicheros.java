@@ -76,7 +76,7 @@ public class CifrarRSAFicheros {
             System.out.println("3a. Cifrar con clave publica");
             
             String sinCifrar = "12345678901234567890123456789012345678901234567890123456789esto no puede ser";
-            sinCifrar += "kokokokokokoiojghjflkghjflkgjhkfsssssssssh";//sinCifrar = "12asdad  ";
+            sinCifrar += "kokokokok";//sinCifrar = "12asdad  ";
             System.out.println(sinCifrar.getBytes("UTF-8").length);
             byte[] partes = new byte[100];
             
@@ -84,13 +84,9 @@ public class CifrarRSAFicheros {
             byte[] bufferCifrado = new byte[5000];
             byte[] buffer = sinCifrar.getBytes("UTF-8");
             
-            for (int i =0;i<buffer.length;i+=100)
-            {
-                partes = Arrays.copyOfRange(buffer, i, i+100);
-                cifrador.doFinal(partes);
-            }
-            
-            System.out.println("TEXTO CIFRADO"+bufferCifrado.length);
+                cifrador.doFinal(buffer);
+
+                System.out.println("TEXTO CIFRADO"+bufferCifrado.length);
             mostrarBytes(bufferCifrado);
             bufferCifrado= Base64.encodeBase64(bufferCifrado);
             System.out.println("\n-------------------------------");
@@ -114,17 +110,13 @@ public class CifrarRSAFicheros {
                 
 		PrivateKey clavePrivada2 = keyFactoryRSA.generatePrivate(clavePrivadaSpec);
                 
-                
-
-                
-		
             cifrador.init(Cipher.DECRYPT_MODE, clavePrivada2); // Descrifra con la clave privada
             
             System.out.println("3b. Descifrar con clave privada");
-            //byte[] bufferPlano2 = cifrador.doFinal(bufferCifrado);
+            byte[] bufferPlano2 = cifrador.doFinal(bufferCifrado);
             
             System.out.println("TEXTO DESCIFRADO");
-            //mostrarBytes(bufferPlano2);
+            mostrarBytes(bufferPlano2);
             mostrarBytes(cifrador.doFinal(Base64.decodeBase64(bufferCifrado)));
             
             System.out.println("\n-------------------------------");

@@ -18,7 +18,7 @@ public class AlmacenarClaves {
 
     public static void main(String[] args) throws Exception {
 
-        String nombre = "server1024";
+        String nombre = "dam1024";
 
         System.out.println("Crea los ficheros " + nombre + ".secreta, "
                 + nombre + ".publica, " + nombre + ".privada");

@@ -109,7 +109,8 @@ public class AlmacenarClaves {
         SecretKey claveSecreta = generadorDES.generateKey();
 
         /**
-         * * Crear SecretKeyFactory usado para las transformaciones de claves secretas
+         * * Crear SecretKeyFactory usado para las transformaciones de claves
+         * secretas
          */
         SecretKeyFactory secretKeyFactoryDES = SecretKeyFactory.getInstance("DES");
 
