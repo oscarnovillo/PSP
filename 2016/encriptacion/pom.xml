@@ -16,6 +16,11 @@
             <artifactId>httpclient</artifactId>
             <version>4.5.2</version>
         </dependency>
-        
+          <dependency>
+            <groupId>org.bouncycastle</groupId>
+            <artifactId>bcprov-jdk14</artifactId>
+            <version>1.54</version>
+            <type>jar</type>
+        </dependency>
     </dependencies>
 </project>
