@@ -75,7 +75,6 @@ public class CifrarRSAFicheros {
             String sinCifrar = "123456789012345678901234567890123456789012345678901234567891234567890123456789012345678901234567890123456789";
 
             System.out.println(sinCifrar.getBytes("UTF-8").length);
-            byte[] partes = new byte[100];
 
             byte[] bufferCifrado = null;
             byte[] bufferCode64 = null;
