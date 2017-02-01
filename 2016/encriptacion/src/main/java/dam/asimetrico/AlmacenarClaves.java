@@ -18,7 +18,7 @@ public class AlmacenarClaves {
 
     public static void main(String[] args) throws Exception {
 
-        String nombre = "dam1024";
+        String nombre = "albertoastudillo";
 
         System.out.println("Crea los ficheros " + nombre + ".secreta, "
                 + nombre + ".publica, " + nombre + ".privada");
@@ -27,7 +27,7 @@ public class AlmacenarClaves {
         Security.addProvider(new BouncyCastleProvider()); // Cargar el provider BC
 
         /**
-         * * Crear claves RSA 512 bits
+         * * Crear claves RSA 1024 bits
          */
         KeyPairGenerator generadorRSA = KeyPairGenerator.getInstance("RSA", "BC"); // Hace uso del provider BC
         generadorRSA.initialize(1024);

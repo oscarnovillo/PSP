@@ -76,7 +76,7 @@ public class PruebaRSA extends HttpServlet {
             case "CIFRADO":
                 // Anadir provider JCE (provider por defecto no soporta RSA)
                 Security.addProvider(new BouncyCastleProvider());  // Cargar el provider BC
-                Security.addProvider(new org.bouncycastle.jce.provider.BouncyCastleProvider());
+                //Security.addProvider(new org.bouncycastle.jce.provider.BouncyCastleProvider());
                 Cipher cifrador = null;
                 KeyFactory keyFactoryRSA = null; // Hace uso del provider BC
                 try {

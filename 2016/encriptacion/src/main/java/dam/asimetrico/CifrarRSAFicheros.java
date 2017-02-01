@@ -39,11 +39,11 @@ public class CifrarRSAFicheros {
 
     public static void main(String[] args) throws FileNotFoundException {
 
-        String nombre = "dam1024";
+        String nombre = "albertoastudillo";
         try {
             // Anadir provider JCE (provider por defecto no soporta RSA)
             Security.addProvider(new BouncyCastleProvider());  // Cargar el provider BC
-            Security.addProvider(new org.bouncycastle.jce.provider.BouncyCastleProvider());
+            //Security.addProvider(new org.bouncycastle.jce.provider.BouncyCastleProvider());
             Cipher cifrador = Cipher.getInstance("RSA/ECB/PKCS1Padding", "BC");
 
             // Crear KeyFactory (depende del provider) usado para las transformaciones de claves*/
@@ -59,9 +59,7 @@ public class CifrarRSAFicheros {
 
             byte[] bufferPub2 = new byte[charsPub];
             System.arraycopy(bufferPub, 0, bufferPub2, 0, charsPub);
-            //d.readFully(bufferPub, 0, 162);
-            //in.read(bufferPub, 0, 5000);
-            in.close();
+
 
             // 4.2 Recuperar clave publica desde datos codificados en formato X509
             X509EncodedKeySpec clavePublicaSpec = new X509EncodedKeySpec(bufferPub2);
@@ -72,7 +70,8 @@ public class CifrarRSAFicheros {
 
             System.out.println("3a. Cifrar con clave publica");
 
-            String sinCifrar = "123456789012345678901234567890123456789012345678901234567891234567890123456789012345678901234567890123456789";
+            String sinCifrar = "123456";
+           
 
             System.out.println(sinCifrar.getBytes("UTF-8").length);
 

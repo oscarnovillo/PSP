@@ -51,7 +51,7 @@ public class ClienteWeb {
 
             // Anadir provider JCE (provider por defecto no soporta RSA)
             Security.addProvider(new BouncyCastleProvider());  // Cargar el provider BC
-            Security.addProvider(new org.bouncycastle.jce.provider.BouncyCastleProvider());
+            //Security.addProvider(new org.bouncycastle.jce.provider.BouncyCastleProvider());
             Cipher cifrador = Cipher.getInstance("RSA/ECB/PKCS1Padding", "BC");
 
             // Crear KeyFactory (depende del provider) usado para las transformaciones de claves*/
