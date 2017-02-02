@@ -78,6 +78,7 @@ public class AlmacenarClaves {
          */
         // 3.1 Codificar clave publica en formato X509 (necesario para escribirla a disco)
         X509EncodedKeySpec x509Spec = new X509EncodedKeySpec(clavePublica.getEncoded());
+        
 
         // 3.2 Escribirla a fichero binario
         out = new FileOutputStream(nombre + ".publica");
