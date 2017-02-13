@@ -59,6 +59,8 @@ public class Cert {
             // prepare the validity of the certificate
             long validSecs = (long) 365 * 24 * 60 * 60; // valid for one year
             // add the certificate information, currently only valid for one year.
+            
+            
             X509Certificate cert = certGen.getSelfCertificate(
                     // enter your details according to your application
                     new X500Name("CN=Pedro Salazar,O=My Organisation,L=My City,C=DE"), validSecs);
@@ -75,11 +77,11 @@ public class Cert {
                 }
             }
 
-            KeyPairGenerator generadorRSA = KeyPairGenerator.getInstance("RSA", "BC"); // Hace uso del provider BC
-            generadorRSA.initialize(1024);
-            KeyPair clavesRSA = generadorRSA.generateKeyPair();
-            PrivateKey clavePrivada = clavesRSA.getPrivate();
-            PublicKey clavePublica = clavesRSA.getPublic();
+            //KeyPairGenerator generadorRSA = KeyPairGenerator.getInstance("RSA", "BC"); // Hace uso del provider BC
+            //generadorRSA.initialize(1024);
+            KeyPair clavesRSA = null;
+            PrivateKey clavePrivada = null;
+            PublicKey clavePublica = null;
 
             KeyStore ks = KeyStore.getInstance("PKCS12", "BC");
             char[] password = "abc".toCharArray();
@@ -99,7 +101,10 @@ public class Cert {
             RSAPrivateKey keyLoad = (RSAPrivateKey) privateKeyEntry.getPrivateKey();
 
             System.out.println(cert.getIssuerX500Principal());
-
+            System.out.println(cert.getSubjectX500Principal());
+            //certLoad.verify(clavePublica);
+            
+            
             dn = certLoad.getSubjectX500Principal().getName();
             ldapDN = new LdapName(dn);
             for (Rdn rdn : ldapDN.getRdns()) {
@@ -127,6 +132,10 @@ public class Cert {
             sign.update(hash.digest("hola".getBytes()));
             System.out.println(sign.verify(firma));
 
+            
+            KeyStore ksMX = KeyStore.getInstance("WINDOWS-MY", "SunMSCAPI");
+            ksLoad.load(null, null);
+            
         } catch (Exception ex) {
             Logger.getLogger(Cert.class.getName()).log(Level.SEVERE, null, ex);
         }
