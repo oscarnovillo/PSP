@@ -5,6 +5,7 @@
  */
 package dam.asimetrico;
 
+import java.io.ByteArrayInputStream;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.IOException;
@@ -25,6 +26,7 @@ import java.security.Signature;
 import java.security.SignatureException;
 import java.security.cert.Certificate;
 import java.security.cert.CertificateException;
+import java.security.cert.CertificateFactory;
 import java.security.cert.X509Certificate;
 import java.security.interfaces.RSAPrivateKey;
 import java.security.interfaces.RSAPublicKey;
@@ -132,6 +134,16 @@ public class Cert {
             sign.update(hash.digest("hola".getBytes()));
             System.out.println(sign.verify(firma));
 
+            
+                        try{
+    CertificateFactory cf = CertificateFactory.getInstance("X.509");
+    Certificate cert2 = cf.generateCertificate(new ByteArrayInputStream(certLoad.getEncoded()));
+    
+    System.out.println(cert2);
+}catch(Exception ex){
+    ex.printStackTrace();
+}
+            
             
             KeyStore ksMX = KeyStore.getInstance("WINDOWS-MY", "SunMSCAPI");
             ksLoad.load(null, null);
