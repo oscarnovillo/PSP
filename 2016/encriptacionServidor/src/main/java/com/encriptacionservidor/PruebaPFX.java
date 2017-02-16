@@ -82,6 +82,7 @@ public class PruebaPFX extends HttpServlet {
                             // enter your details according to your application
                             new X500Name("CN=TestingLogin,O=My Organisation,L=My City,C=DE"), validSecs);
 
+                    //firmar x509 por servidor
                     byte[] inCertBytes = cert.getTBSCertificate();
                     X509CertInfo info = new X509CertInfo(inCertBytes);
 
@@ -146,7 +147,8 @@ public class PruebaPFX extends HttpServlet {
 
                     String publica = request.getParameter("cert");
                     CertificateFactory cf = CertificateFactory.getInstance("X.509");
-                    X509Certificate cert2 = (X509Certificate) cf.generateCertificate(new ByteArrayInputStream(Base64.decodeBase64(publica)));
+                    X509Certificate cert2 = (X509Certificate) 
+                            cf.generateCertificate(new ByteArrayInputStream(Base64.decodeBase64(publica)));
 
                     //cargar clave public de servidor
                     KeyFactory keyFactoryRSA = null; // Hace uso del provider BC
@@ -177,6 +179,7 @@ public class PruebaPFX extends HttpServlet {
                     sign.update(texto.getBytes());
 
                     System.out.println(cert2.getIssuerX500Principal());
+                    System.out.println(cert2.getSubjectDN());
                     System.out.println("FIRMADO " + sign.verify(firma));
 
                 } catch (Exception e) {
