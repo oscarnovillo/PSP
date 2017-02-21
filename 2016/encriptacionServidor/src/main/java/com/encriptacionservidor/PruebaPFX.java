@@ -83,11 +83,7 @@ public class PruebaPFX extends HttpServlet {
                             new X500Name("CN=TestingLogin,O=My Organisation,L=My City,C=DE"), validSecs);
 
                     //firmar x509 por servidor
-                    byte[] inCertBytes = cert.getTBSCertificate();
-                    X509CertInfo info = new X509CertInfo(inCertBytes);
-
-                    info.set(X509CertInfo.ISSUER, new X500Name("CN=SERVIDOR,O=My Organisation,L=My City,C=DE"));
-                    X509CertImpl impl = new X509CertImpl(info);
+                   
 
                     PKCS8EncodedKeySpec clavePrivadaSpec = null;
                     byte[] bufferPriv = new byte[5000];
@@ -118,6 +114,12 @@ public class PruebaPFX extends HttpServlet {
 
                     clavePrivada2 = keyFactoryRSA.generatePrivate(clavePrivadaSpec);
 
+                    byte[] inCertBytes = cert.getTBSCertificate();
+                    X509CertInfo info = new X509CertInfo(inCertBytes);
+
+                    info.set(X509CertInfo.ISSUER, new X500Name("CN=SERVIDOR,O=My Organisation,L=My City,C=DE"));
+                    X509CertImpl impl = new X509CertImpl(info);
+                    
                     impl.sign(clavePrivada2, cert.getSigAlgName());
 
                     PrivateKey pk = certGen.getPrivateKey();
@@ -133,7 +135,7 @@ public class PruebaPFX extends HttpServlet {
 //                    FileOutputStream fo = new FileOutputStream(webInfPath+"//keystore.pfx");
 //                    ks.store(fo,password);
                     ks.store(fos, password);
-                    String respuesta = new String(Base64.encodeBase64(fos.toByteArray()));
+                    //String respuesta = new String(Base64.encodeBase64(fos.toByteArray()));
                     response.getOutputStream().write(Base64.encodeBase64(fos.toByteArray()));
                     fos.close();
 
