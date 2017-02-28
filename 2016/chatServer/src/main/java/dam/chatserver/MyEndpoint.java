@@ -48,6 +48,7 @@ import java.io.IOException;
 import java.nio.ByteBuffer;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import javax.servlet.http.HttpSession;
 import javax.websocket.CloseReason;
 import javax.websocket.EndpointConfig;
 import javax.websocket.OnClose;
@@ -71,6 +72,8 @@ public class MyEndpoint {
         u.setUser(user);
         session.getUserProperties().put("user",
                 u);
+        
+        session.getUserProperties().put("httpsession",config.getUserProperties().get("httpsession"));
     }
 
     @OnClose
@@ -99,7 +102,11 @@ public class MyEndpoint {
                 case MENSAJE:
                     for (Session s : session.getOpenSessions()) {
                         try {
-                            String men = mapper.writeValueAsString(meta.getContenido());
+                            String men = 
+                                    mapper.writeValueAsString(meta.getContenido());
+                            
+                           HttpSession httpSession = (HttpSession)session.getUserProperties().get("httpsession");
+                            String key = (String)httpSession.getAttribute("key");
                             s.getBasicRemote().sendText(men);
                         } catch (IOException ex) {
                             Logger.getLogger(MyEndpoint.class.getName()).log(Level.SEVERE, null, ex);
