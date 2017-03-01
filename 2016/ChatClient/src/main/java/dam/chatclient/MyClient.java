@@ -39,9 +39,10 @@
  */
 package dam.chatclient;
 
-import com.datoshttp.Juego;
+
 import com.datoshttp.Mensaje;
 import com.datoshttp.MetaMensajeWS;
+import com.datoshttp.OrdenRoomsWS;
 import com.datoshttp.TipoMensaje;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.core.type.TypeReference;
@@ -49,10 +50,16 @@ import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import java.io.IOException;
 import java.net.URI;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Map;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.websocket.ClientEndpoint;
 import javax.websocket.ClientEndpointConfig;
+import javax.websocket.Endpoint;
+import javax.websocket.EndpointConfig;
+import javax.websocket.MessageHandler;
 import javax.websocket.OnClose;
 import javax.websocket.OnError;
 import javax.websocket.OnMessage;
@@ -63,29 +70,49 @@ import org.glassfish.tyrus.client.ClientManager;
 /**
  * @author Arun Gupta
  */
-@ClientEndpoint
-public class MyClient {
+
+public class MyClient extends Endpoint {
     private Session userSession;
     private MessageListener messageHandler;
     
-    public MyClient( URI endpointURI) {
+    public MyClient( URI endpointURI, String sessionId) {
          try {
-            //final ClientEndpointConfig cec = ClientEndpointConfig.Builder.create().build();
+            final ClientEndpointConfig cec;
+            
+            cec = ClientEndpointConfig.Builder.create().configurator(new ClientEndpointConfig.Configurator() { 
+            @Override 
+            public void beforeRequest(Map<String, List<String>> headers) { 
+             
+                super.beforeRequest(headers);
+                             //String sessionId = login();
+                             List cookieList = headers.get("Cookie");
+                             if (cookieList == null) cookieList = new ArrayList();
+                             cookieList.add("JSESSIONID=\""+sessionId+"\"");
+                             headers.put("Cookie", cookieList);
 
+            } 
+        }).build(); 
+            
             ClientManager client = ClientManager.createClient();
-            client.connectToServer(this, endpointURI);
+            client.connectToServer (this, cec,endpointURI);
         } catch (Exception e) {
             throw new RuntimeException(e);
         }
         
     }
-    
-    @OnOpen
-    public void onOpen(Session session) {
-        this.userSession = session;
+  
+    @Override
+    public void onOpen(Session session, EndpointConfig ec) {
+       this.userSession = session;
+       session.addMessageHandler(new MessageHandler.Whole<String>() {
+            @Override
+            public void onMessage(String message) {
+                processMessage(message);
+            }
+        });
         System.out.println("Connected to endpoint: " + session.getBasicRemote());
-       
     }
+    
     
     public void addMessageHandler(final MessageListener msgHandler) {
         messageHandler = msgHandler;
@@ -93,10 +120,10 @@ public class MyClient {
 
     public void sendMessage(Mensaje message) {
         try {
+            ObjectMapper mapper = new ObjectMapper();
             MetaMensajeWS ms = new MetaMensajeWS();
             ms.setTipo(TipoMensaje.MENSAJE);
-            ms.setContenido(message);
-            ObjectMapper mapper = new ObjectMapper();
+            ms.setContenido(mapper.writeValueAsString(message));
             String men = mapper.writeValueAsString(ms);
             userSession.getAsyncRemote().sendText(men);
         } catch (JsonProcessingException ex) {
@@ -104,8 +131,20 @@ public class MyClient {
         }
     }
 
+     public void sendOrden(OrdenRoomsWS orden) {
+        try {
+            ObjectMapper mapper = new ObjectMapper();
+            MetaMensajeWS ms = new MetaMensajeWS();
+            ms.setTipo(TipoMensaje.ORDEN);
+            ms.setContenido(mapper.writeValueAsString(orden));
+            String men = mapper.writeValueAsString(ms);
+            userSession.getAsyncRemote().sendText(men);
+        } catch (JsonProcessingException ex) {
+            Logger.getLogger(MyClient.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    }
     
-    @OnMessage
+    
     public void processMessage(String message) {
        if (messageHandler != null) {
            try {
@@ -121,14 +160,8 @@ public class MyClient {
            }
         }
     }
-    
-    @OnError
-    public void processError(Throwable t) {
-        t.printStackTrace();
-    }
-    
-    
-    public static interface MessageListener {
+
+     public static interface MessageListener {
 
         public void handleMessage(Mensaje message);
     }

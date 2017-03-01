@@ -63,7 +63,9 @@
             <artifactId>tyrus-container-grizzly-server</artifactId>
             <version>1.12</version>
         </dependency>
-                
-      
-       
-    </dependencies></project>
+  <dependency>
+   <groupId>com</groupId>
+   <artifactId>chatShared</artifactId>
+   <version>1.0-SNAPSHOT</version>
+  </dependency>
+ </dependencies></project>
