@@ -146,18 +146,18 @@ public class MyClient extends Endpoint {
     
     
     public void processMessage(String message) {
-       if (messageHandler != null) {
-           try {
-               ObjectMapper mapper = new ObjectMapper();
-               mapper.configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);
-               Mensaje mensaje = mapper.readValue(message,
-                       new TypeReference<Mensaje>() {
-                       });
-               
-               messageHandler.handleMessage(mensaje);
-           } catch (IOException ex) {
-               Logger.getLogger(MyClient.class.getName()).log(Level.SEVERE, null, ex);
-           }
+        if (messageHandler != null) {
+            try {
+                ObjectMapper mapper = new ObjectMapper();
+                mapper.configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);
+                Mensaje mensaje = mapper.readValue(message,
+                        new TypeReference<Mensaje>() {
+                });
+
+                messageHandler.handleMessage(mensaje);
+            } catch (IOException ex) {
+                Logger.getLogger(MyClient.class.getName()).log(Level.SEVERE, null, ex);
+            }
         }
     }
 
