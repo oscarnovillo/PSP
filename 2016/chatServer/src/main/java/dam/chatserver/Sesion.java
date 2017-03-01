@@ -7,6 +7,7 @@ package dam.chatserver;
 
 import java.io.IOException;
 import java.io.PrintWriter;
+import java.util.Enumeration;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
@@ -17,8 +18,8 @@ import javax.servlet.http.HttpServletResponse;
  *
  * @author oscar
  */
-@WebServlet(name = "Login", urlPatterns = {"/Login"})
-public class Login extends HttpServlet {
+@WebServlet(name = "Sesion", urlPatterns = {"/Sesion"})
+public class Sesion extends HttpServlet {
 
     /**
      * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
@@ -31,9 +32,19 @@ public class Login extends HttpServlet {
      */
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        String user = request.getParameter("user");
-        request.getSession().setAttribute("user", user);
-        request.getSession().setAttribute("key", user+"1234");
+        Enumeration nombres = request.getSession().getAttributeNames();
+        response.getWriter().print("<html><body>");
+        
+        while (nombres.hasMoreElements())
+        {
+            String nombre = (String)nombres.nextElement();
+            response.getWriter().print(nombre+ "==="+
+                request.getSession().getAttribute(nombre));
+            response.getWriter().print("<br>");
+        }
+
+        response.getWriter().print("</body></html>");
+
     }
 
     // <editor-fold defaultstate="collapsed" desc="HttpServlet methods. Click on the + sign on the left to edit the code.">

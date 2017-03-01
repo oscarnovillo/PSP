@@ -41,7 +41,7 @@ package dam.chatserver;
 
 import com.datoshttp.Mensaje;
 import com.datoshttp.MetaMensajeWS;
-import com.datoshttp.OrdenWS;
+import com.datoshttp.OrdenRoomsWS;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -63,19 +63,23 @@ import model.UserWS;
 /**
  * @author Arun Gupta
  */
-@ServerEndpoint(value = "/websocket/{user}", configurator = ServletAwareConfig.class)
+@ServerEndpoint(value = "/websocket", configurator = ServletAwareConfig.class)
 public class MyEndpoint {
 
     @OnOpen
-    public void onOpen(Session session, @PathParam("user") final String user, 
+    public void onOpen(Session session,
             EndpointConfig config) {
-       
+
+        HttpSession httpSession = (HttpSession) config.getUserProperties().get("httpsession");
+
         UserWS u = new UserWS();
-        u.setUser(user);
+        u.setUser((String) httpSession.getAttribute("user"));
         session.getUserProperties().put("user",
                 u);
-        
-        session.getUserProperties().put("httpsession",config.getUserProperties().get("httpsession"));
+
+        session.getUserProperties().put("httpsession", httpSession);
+
+        httpSession.setAttribute("perro", "pitbull");
 
     }
 
@@ -92,9 +96,9 @@ public class MyEndpoint {
     }
 
     @OnMessage
-    public void echoText(String mensaje, Session session) {
+    public void echoText(String mensaje, Session sessionQueManda) {
         try {
-            
+
             ObjectMapper mapper = new ObjectMapper();
             mapper.configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);
             MetaMensajeWS meta = mapper.readValue(mensaje,
@@ -103,37 +107,34 @@ public class MyEndpoint {
 
             switch (meta.getTipo()) {
                 case MENSAJE:
-                    for (Session s : session.getOpenSessions()) {
+                    for (Session sesionesMandar : sessionQueManda.getOpenSessions()) {
                         try {
-                            Mensaje j = mapper.readValue(
-                                   (String) meta.getContenido(),
-                    new TypeReference<Mensaje>() {});
-                            
-                            String men = 
-                                    mapper.writeValueAsString(meta.getContenido());
+                            Mensaje mensajeCliente = mapper.readValue(
+                                    (String) meta.getContenido(),
+                                    new TypeReference<Mensaje>() {
+                            });
 
-                           HttpSession httpSession = (HttpSession)session.getUserProperties().get("httpsession");
-                           UserWS user = (UserWS)session.getUserProperties().get("user");
-                           if (user.getRoom().indexOf(j.getRoom())!=-1)
-                           {
-                               
-                           }
-                            //String key = (String)httpSession.getAttribute("key");
-                            s.getBasicRemote().sendText(men);
+                            HttpSession httpSession = (HttpSession) sessionQueManda.getUserProperties().get("httpsession");
+
+                            String key = (String) httpSession.getAttribute("key");
+                            mensajeCliente.setRoom(key);
+                            UserWS userMandar = (UserWS) sesionesMandar.getUserProperties().get("user");
+
+                            if (userMandar.buscaRoom(mensajeCliente.getRoom())) {
+                                sesionesMandar.getBasicRemote().sendText(mapper.writeValueAsString(mensajeCliente));
+                            }
                         } catch (IOException ex) {
                             Logger.getLogger(MyEndpoint.class.getName()).log(Level.SEVERE, null, ex);
                         }
                     }
                     break;
                 case ORDEN:
-                    OrdenWS orden = mapper.readValue(mensaje,
-                            new TypeReference<OrdenWS>() {
+                    OrdenRoomsWS orden = mapper.readValue(mensaje,
+                            new TypeReference<OrdenRoomsWS>() {
                     });
-                    if (orden.getOrden().equals("ADD"))
-                    {
-                        UserWS u = (UserWS)session.getUserProperties().get("user");
-                       //
-                       ///u.setRoom(room);
+                    if (orden.getOrden().equals("ADD")) {
+                        UserWS u = (UserWS) sessionQueManda.getUserProperties().get("user");
+                        u.getRoom().add(orden.getRoom());
                     }
                     break;
             }
