@@ -94,6 +94,7 @@ public class Cert {
             ks.store(fos, password);
             fos.close();
 
+            //leer fichero
             KeyStore ksLoad = KeyStore.getInstance("PKCS12", "BC");
             ksLoad.load(new FileInputStream("keystore.pfx"), password);
 
