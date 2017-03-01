@@ -39,6 +39,7 @@
  */
 package dam.chatserver;
 
+import com.datoshttp.Mensaje;
 import com.datoshttp.MetaMensajeWS;
 import com.datoshttp.OrdenWS;
 import com.fasterxml.jackson.core.type.TypeReference;
@@ -66,7 +67,8 @@ import model.UserWS;
 public class MyEndpoint {
 
     @OnOpen
-    public void onOpen(Session session, @PathParam("user") final String user, EndpointConfig config) {
+    public void onOpen(Session session, @PathParam("user") final String user, 
+            EndpointConfig config) {
        
         UserWS u = new UserWS();
         u.setUser(user);
@@ -74,6 +76,7 @@ public class MyEndpoint {
                 u);
         
         session.getUserProperties().put("httpsession",config.getUserProperties().get("httpsession"));
+
     }
 
     @OnClose
@@ -102,11 +105,20 @@ public class MyEndpoint {
                 case MENSAJE:
                     for (Session s : session.getOpenSessions()) {
                         try {
+                            Mensaje j = mapper.readValue(
+                                   (String) meta.getContenido(),
+                    new TypeReference<Mensaje>() {});
+                            
                             String men = 
                                     mapper.writeValueAsString(meta.getContenido());
-                            
+
                            HttpSession httpSession = (HttpSession)session.getUserProperties().get("httpsession");
-                            String key = (String)httpSession.getAttribute("key");
+                           UserWS user = (UserWS)session.getUserProperties().get("user");
+                           if (user.getRoom().indexOf(j.getRoom())!=-1)
+                           {
+                               
+                           }
+                            //String key = (String)httpSession.getAttribute("key");
                             s.getBasicRemote().sendText(men);
                         } catch (IOException ex) {
                             Logger.getLogger(MyEndpoint.class.getName()).log(Level.SEVERE, null, ex);
