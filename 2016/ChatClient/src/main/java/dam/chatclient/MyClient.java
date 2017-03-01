@@ -70,7 +70,7 @@ public class MyClient {
     
     public MyClient( URI endpointURI) {
          try {
-            final ClientEndpointConfig cec = ClientEndpointConfig.Builder.create().build();
+            //final ClientEndpointConfig cec = ClientEndpointConfig.Builder.create().build();
 
             ClientManager client = ClientManager.createClient();
             client.connectToServer(this, endpointURI);
