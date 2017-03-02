@@ -125,9 +125,9 @@ public class MyEndpoint {
                             mensajeCliente.setRoom(key);
                             UserWS userMandar = (UserWS) sesionesMandar.getUserProperties().get("user");
 
-                            if (userMandar.buscaRoom(mensajeCliente.getRoom())) {
+                           // if (userMandar.buscaRoom(mensajeCliente.getRoom())) {
                                 sesionesMandar.getBasicRemote().sendText(mapper.writeValueAsString(mensajeCliente));
-                            }
+                            //}
                         } catch (IOException ex) {
                             Logger.getLogger(MyEndpoint.class.getName()).log(Level.SEVERE, null, ex);
                         }
