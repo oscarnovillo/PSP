@@ -125,6 +125,9 @@ public class MyClient extends Endpoint {
             ms.setTipo(TipoMensaje.MENSAJE);
             ms.setContenido(mapper.writeValueAsString(message));
             String men = mapper.writeValueAsString(ms);
+            
+            //encriptar el men con la key
+            
             userSession.getAsyncRemote().sendText(men);
         } catch (JsonProcessingException ex) {
             Logger.getLogger(MyClient.class.getName()).log(Level.SEVERE, null, ex);
