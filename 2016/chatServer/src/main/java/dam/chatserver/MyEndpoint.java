@@ -99,6 +99,11 @@ public class MyEndpoint {
     public void echoText(String mensaje, Session sessionQueManda) {
         try {
 
+            // descencriptar mensaje
+            HttpSession httpSession = (HttpSession) sessionQueManda.getUserProperties().get("httpsession");
+
+            String key = (String) httpSession.getAttribute("key");
+                       
             ObjectMapper mapper = new ObjectMapper();
             mapper.configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);
             MetaMensajeWS meta = mapper.readValue(mensaje,
@@ -114,9 +119,9 @@ public class MyEndpoint {
                                     new TypeReference<Mensaje>() {
                             });
 
-                            HttpSession httpSession = (HttpSession) sessionQueManda.getUserProperties().get("httpsession");
+                             httpSession = (HttpSession) sesionesMandar.getUserProperties().get("httpsession");
 
-                            String key = (String) httpSession.getAttribute("key");
+                             key = (String) httpSession.getAttribute("key");
                             mensajeCliente.setRoom(key);
                             UserWS userMandar = (UserWS) sesionesMandar.getUserProperties().get("user");
 
