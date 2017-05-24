@@ -67,7 +67,8 @@ public class ClienteWebCert {
 
             X509Certificate certLoad = (X509Certificate) ksLoad.getCertificate("publica");
             KeyStore.PasswordProtection pt = new KeyStore.PasswordProtection(password);
-            KeyStore.PrivateKeyEntry privateKeyEntry = (KeyStore.PrivateKeyEntry) ksLoad.getEntry("privada", pt);
+            KeyStore.PrivateKeyEntry privateKeyEntry = 
+                    (KeyStore.PrivateKeyEntry) ksLoad.getEntry("privada", pt);
             RSAPrivateKey keyLoad = (RSAPrivateKey) privateKeyEntry.getPrivateKey();
             
  

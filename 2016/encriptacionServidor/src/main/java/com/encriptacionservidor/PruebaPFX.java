@@ -31,6 +31,8 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.crypto.Cipher;
 import javax.crypto.NoSuchPaddingException;
+import javax.naming.ldap.LdapName;
+import javax.naming.ldap.Rdn;
 import javax.servlet.ServletConfig;
 import javax.servlet.ServletContext;
 import javax.servlet.ServletException;
@@ -78,13 +80,7 @@ public class PruebaPFX extends HttpServlet {
                     long validSecs = (long) 365 * 24 * 60 * 60; // valid for one year
                     // add the certificate information, currently only valid for one year.
 
-                    X509Certificate cert = certGen.getSelfCertificate(
-                            // enter your details according to your application
-                            new X500Name("CN=TestingLogin,O=My Organisation,L=My City,C=DE"), validSecs);
-
                     //firmar x509 por servidor
-                   
-
                     PKCS8EncodedKeySpec clavePrivadaSpec = null;
                     byte[] bufferPriv = new byte[5000];
                     InputStream in = request.getServletContext().getResourceAsStream("/WEB-INF/dam1024.privada");
@@ -103,7 +99,7 @@ public class PruebaPFX extends HttpServlet {
                         Logger.getLogger(PruebaRSA.class.getName()).log(Level.SEVERE, null, ex);
                     }
 
-                    PrivateKey clavePrivada2;
+                    PrivateKey clavePrivadaServidor;
                     // Anadir provider JCE (provider por defecto no soporta RSA)
                     Security.addProvider(new BouncyCastleProvider());  // Cargar el provider BC
                     //Security.addProvider(new org.bouncycastle.jce.provider.BouncyCastleProvider());
@@ -112,28 +108,33 @@ public class PruebaPFX extends HttpServlet {
 
                     keyFactoryRSA = KeyFactory.getInstance("RSA", "BC");
 
-                    clavePrivada2 = keyFactoryRSA.generatePrivate(clavePrivadaSpec);
+                    clavePrivadaServidor = keyFactoryRSA.generatePrivate(clavePrivadaSpec);
+
+                    X509Certificate cert = certGen.getSelfCertificate(
+                            // enter your details according to your application
+                            new X500Name("CN=TestingLogin,O=My Organisation,L=My City,C=DE"), validSecs);
 
                     byte[] inCertBytes = cert.getTBSCertificate();
                     X509CertInfo info = new X509CertInfo(inCertBytes);
 
                     info.set(X509CertInfo.ISSUER, new X500Name("CN=SERVIDOR,O=My Organisation,L=My City,C=DE"));
-                    X509CertImpl impl = new X509CertImpl(info);
-                    
-                    impl.sign(clavePrivada2, cert.getSigAlgName());
+                    X509CertImpl certificadoCliente = new X509CertImpl(info);
 
-                    PrivateKey pk = certGen.getPrivateKey();
+                    certificadoCliente.sign(clavePrivadaServidor, cert.getSigAlgName());
+
+                    PrivateKey clavePrivadaCliente = certGen.getPrivateKey();
 
                     KeyStore ks = KeyStore.getInstance("PKCS12", "BC");
-                    char[] password = "abc".toCharArray();
                     ks.load(null, null);
-                    ks.setCertificateEntry("publica", impl);
-                    ks.setKeyEntry("privada", pk, null, new Certificate[]{impl});
+                    ks.setCertificateEntry("publica", certificadoCliente);
+                    ks.setKeyEntry("privada", clavePrivadaCliente, null,
+                            new Certificate[]{certificadoCliente});
                     ByteArrayOutputStream fos = new ByteArrayOutputStream();
 
 //                    String webInfPath = request.getServletContext().getRealPath("WEB-INF");
 //                    FileOutputStream fo = new FileOutputStream(webInfPath+"//keystore.pfx");
 //                    ks.store(fo,password);
+                    char[] password = "abc".toCharArray();
                     ks.store(fos, password);
                     //String respuesta = new String(Base64.encodeBase64(fos.toByteArray()));
                     response.getOutputStream().write(Base64.encodeBase64(fos.toByteArray()));
@@ -145,12 +146,10 @@ public class PruebaPFX extends HttpServlet {
                 break;
             case "MANDAR":
                 try {
-                    String texto = request.getParameter("texto");
 
                     String publica = request.getParameter("cert");
                     CertificateFactory cf = CertificateFactory.getInstance("X.509");
-                    X509Certificate cert2 = (X509Certificate) 
-                            cf.generateCertificate(new ByteArrayInputStream(Base64.decodeBase64(publica)));
+                    X509Certificate cert2 = (X509Certificate) cf.generateCertificate(new ByteArrayInputStream(Base64.decodeBase64(publica)));
 
                     //cargar clave public de servidor
                     KeyFactory keyFactoryRSA = null; // Hace uso del provider BC
@@ -171,9 +170,10 @@ public class PruebaPFX extends HttpServlet {
 
                     X509EncodedKeySpec clavePublicaSpec = new X509EncodedKeySpec(bufferPub2);
                     PublicKey clavePublica2 = keyFactoryRSA.generatePublic(clavePublicaSpec);
-                    
+
                     cert2.verify(clavePublica2);
 
+                    String texto = request.getParameter("texto");
                     byte[] firma = Base64.decodeBase64(request.getParameter("firma"));
 
                     Signature sign = Signature.getInstance("SHA256WithRSA");
@@ -182,10 +182,16 @@ public class PruebaPFX extends HttpServlet {
 
                     System.out.println(cert2.getIssuerX500Principal());
                     System.out.println(cert2.getSubjectDN());
+                    LdapName ldapDN = new LdapName(cert2.getSubjectDN().getName());
+                    for (Rdn rdn : ldapDN.getRdns()) {
+                        if (rdn.getType().equals("CN")) {
+                            System.out.println(rdn.getValue());
+                        }
+                    }
                     System.out.println("FIRMADO " + sign.verify(firma));
 
                 } catch (Exception e) {
- Logger.getLogger(PruebaRSA.class.getName()).log(Level.SEVERE, null, e);
+                    Logger.getLogger(PruebaRSA.class.getName()).log(Level.SEVERE, null, e);
                 }
                 break;
         }
